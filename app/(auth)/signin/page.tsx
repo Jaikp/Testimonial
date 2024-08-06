@@ -6,7 +6,7 @@ import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 
-export function Basic() {
+export function page() {
   const [passwordShown, setPasswordShown] = useState(false);
   const [username, setusername] = useState("");
   const [password, setPassword] = useState("")
@@ -135,4 +135,4 @@ export function Basic() {
   );
 }
 
-export default Basic;
+export default page;
