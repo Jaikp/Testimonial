@@ -19,7 +19,7 @@ export const NEXTAUTH = {
             const existinguser = await prisma.user.findUnique({
               where: { email: credentials.email },
             });
-            
+            console.log(existinguser);
             if (existinguser && existinguser.password) {
               const isValidPassword = await bcrypt.compare(credentials.password, existinguser.password);
     
@@ -57,17 +57,18 @@ export const NEXTAUTH = {
     callbacks: {
         async signIn({ user, account, profile } :any) {
             if (account.provider === 'google') {
-              const googleProfile = profile as { id: string; email: string; name: string };
-      
+              
+              const googleProfile = profile as { sub: string; email: string; name: string };
+              console.log(googleProfile.sub);
               let existingUser = await prisma.user.findUnique({
-                where: { googleId: googleProfile.id },
+                where: { googleId: googleProfile.sub },
               });
-      
+              console.log("fdjkvndsjkbcahjlsdb helloo");
               if (!existingUser) {
                 existingUser = await prisma.user.create({
                   data: {
                     email: googleProfile.email,
-                    googleId: googleProfile.id,
+                    googleId: googleProfile.sub,
                     name: googleProfile.name,
                   },
                 });
@@ -80,6 +81,7 @@ export const NEXTAUTH = {
           },
         session: ({ session, token, user }: any) => {
             if (session.user) {
+              console.log(session);
                 session.user.id = token.sub
             }
             return session

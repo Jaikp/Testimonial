@@ -7,7 +7,12 @@ import Footer from '@/components/Navbar/Footer';
 import { ClipboardCopyButton } from '@/components/Testimonials/Clipboard';
 
 function Page({ params }: { params: any }) {
-    const { reviews , getReview} = useContext(StoreContext);    
+
+    const context = useContext(StoreContext);
+    if (!context) {
+      throw new Error("StoreContext must be used within a StoreProvider");
+   }
+    const { reviews , getReview} = context;    
     const [embed, setembed] = useState(false)
     
     useEffect(() => {
@@ -108,7 +113,6 @@ function Page({ params }: { params: any }) {
                     </div>
                 </div>
             </>):(<></>)}
-            <iframe src="http://localhost:3000/embeds/671d5126-e629-4add-8afd-26f2b5141b1d" width="100%" height="1000" title="testimonial"></iframe>
             <Footer/>
         </div>
     );

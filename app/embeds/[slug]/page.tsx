@@ -4,7 +4,11 @@ import { StoreContext } from '@/context/StoreContext'
 import React, { useContext, useEffect } from 'react'
 
 function page({params}:{params:any}) {
-    const { reviews , getReview } = useContext(StoreContext);    
+  const context = useContext(StoreContext);
+  if (!context) {
+    throw new Error("StoreContext must be used within a StoreProvider");
+ }
+    const { reviews , getReview } = context;    
     
     useEffect(() => {
       

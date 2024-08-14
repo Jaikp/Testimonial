@@ -2,7 +2,8 @@
 
 import { useRouter } from 'next/router';
 import Navbar from "@/components/Navbar/Navbar";
-import Footer from "@/components/Footer/Footer";
+import Footer from './Navbar/Footer';
+
 
 const ConditionalLayout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
@@ -13,7 +14,7 @@ const ConditionalLayout = ({ children }: { children: React.ReactNode }) => {
     <>
       {shouldRenderLayout && <Navbar />}
       {children}
-      {shouldRenderLayout && <Footer />}
+      {shouldRenderLayout && <Footer/>}
     </>
   );
 };

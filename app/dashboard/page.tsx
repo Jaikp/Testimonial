@@ -11,7 +11,14 @@ import React, { useContext, useEffect, useState } from 'react'
 function page() {
 
     const router = useRouter();
-    const {link,url,spaces,addSpace,userId} = useContext(StoreContext);
+    const context = useContext(StoreContext);
+    
+    // Ensure context is not undefined
+    if (!context) {
+       throw new Error("StoreContext must be used within a StoreProvider");
+    }
+
+    const {link,url,spaces,addSpace,userId} = context;
     
     const [space, setSpace] = useState({
         home : true,
@@ -89,11 +96,11 @@ function page() {
             </div>
         </div>
         <div className='mt-12 flex flex-wrap gap-5 items-start h-fit'>
-            {spaces.length === 0 ?(<div className='w-full mt-48'>
+            {spaces && spaces.length === 0 ?(<div className='w-full mt-48'>
                 <p className='text-center'>No space yet, add new one?</p>
             </div>)
             :
-            (spaces.map((space, index) => (
+            (spaces && spaces.map((space, index) => (
                 <SpaceCard key={index} header={space} router={router} />
             )))
             } 
@@ -101,7 +108,7 @@ function page() {
  
     </div>
     </div>
-    <iframe src="localhost:3000/embeds/fixed/671d5126-e629-4add-8afd-26f2b5141b1d" width="100%" height="100vh" title="testimonial"></iframe>
+    
     <Footer/>
     </div>
     )

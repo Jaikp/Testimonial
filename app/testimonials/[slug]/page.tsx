@@ -6,7 +6,16 @@ import { Rating } from "@material-tailwind/react";
  
 function page({params}:{params:any}) { 
   
-  const {getReviewSpace,reviewSpace,video,getendpoint,addReview} = useContext(StoreContext);
+  const context = useContext(StoreContext);
+    
+    
+    if (!context) {
+        throw new Error("StoreContext must be used within a StoreProvider");
+    }
+
+    const { getReviewSpace, reviewSpace, video, getendpoint, addReview } = context;
+
+
   const [upload, setUpload] = useState('text');
 
 
@@ -119,7 +128,7 @@ function page({params}:{params:any}) {
                 <li>What is the best thing about [our product / service]</li>
               </ul>
               
-              <Rating value={Number(form.rating)} onChange={handleRatingChange}  />
+              <Rating value={Number(form.rating)} onChange={handleRatingChange} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}  />
 
               <textarea onChange={handleChange} name='content' className='w-full bg-white border mt-4 h-20'></textarea>
 

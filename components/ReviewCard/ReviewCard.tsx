@@ -14,7 +14,7 @@ function ReviewCard({review}:{review:any}) {
                 <i className="fi fi-rs-heart"></i>
             </div>
         </div>
-        <Rating className='mt-3' value={Number(review.rating)} readonly/>
+        <Rating className='mt-3' value={Number(review.rating)} readonly placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}/>
         <p className='my-10'>{review.content}</p>
         <div className='w-28 h-28 bg-black mb-8'>
 

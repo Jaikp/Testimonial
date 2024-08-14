@@ -14,13 +14,11 @@ export function ClipboardCopyButton({spaceId}:{spaceId:any}) {
       onClick={() => {
         copy(iframeCode);
         setCopied(true);
-      }}
-      className="flex items-center gap-x-3 px-4 py-2.5 lowercase"
-    >
+      } }
+      className="flex items-center gap-x-3 px-4 py-2.5 lowercase"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}    >
       <Typography
         className="border-r border-gray-400/50 pr-3 font-normal"
-        variant="small"
-      >
+        variant="small" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}      >
         {iframeCode}
       </Typography>
       {copied ? (

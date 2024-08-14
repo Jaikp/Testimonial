@@ -2,7 +2,30 @@
 import { createContext, useState } from "react";
 import { useEffect } from "react";
 import axios from 'axios';
-export const StoreContext = createContext({})
+interface ReviewSpace {
+    header?: string;
+    message?: string;
+    // Add other fields as necessary
+}
+
+interface StoreContextType {
+    url: string;
+    addSpace: (prop: any) => Promise<void>;
+    getSpace: () => Promise<void>;
+    getReviewSpace: (prop: any) => Promise<void>;
+    reviewSpace: ReviewSpace;
+    link: string;
+    spaces: any[];
+    getendpoint: () => Promise<void>;
+    video: string;
+    setuserId: (id: string) => void;
+    userId: string;
+    addReview: (prop: any) => Promise<void>;
+    getReview: (prop: any) => Promise<void>;
+    reviews: any[];
+}
+
+export const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
 const StoreContextProvider = (props:any) => {
 
@@ -10,7 +33,7 @@ const StoreContextProvider = (props:any) => {
     const [userId, setuserId] = useState('');
     const [spaces, setSpaces] = useState<any[]>([]);
     const [link, setlink] = useState<string>("");
-    const [reviewSpace, setReviewSpace] = useState([]);
+    const [reviewSpace, setReviewSpace] = useState<ReviewSpace>({});
     const [video, setVideo] = useState('')
     const [reviews, setReviews] = useState<any[]>([]);
 
@@ -112,12 +135,11 @@ const StoreContextProvider = (props:any) => {
 
     
 
-    const contextVlaue = {
+    const contextVlaue : StoreContextType = {
         url,
         addSpace,
         getSpace,
         getReviewSpace,
-        reviewSpace,
         link,
         spaces,
         getendpoint,
@@ -126,7 +148,8 @@ const StoreContextProvider = (props:any) => {
         userId,
         addReview,
         getReview,
-        reviews
+        reviews,
+        reviewSpace
     }
 
     return (
