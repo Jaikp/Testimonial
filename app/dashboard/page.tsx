@@ -5,6 +5,7 @@ import SpaceLink from '@/components/Forms/SpaceLink';
 import Footer from '@/components/Navbar/Footer';
 import Navbar from '@/components/Navbar/Navbar';
 import { StoreContext } from '@/context/StoreContext';
+import { Spinner } from '@material-tailwind/react';
 import { useRouter } from 'next/navigation'
 import React, { useContext, useEffect, useState } from 'react'
 
@@ -18,13 +19,21 @@ function page() {
        throw new Error("StoreContext must be used within a StoreProvider");
     }
 
-    const {link,url,spaces,addSpace,userId} = context;
-    
+    const {link,spaces,addSpace,userId,getSpace} = context;
+    const [loading, setLoading] = useState(true);
     const [space, setSpace] = useState({
         home : true,
         form : false,
         close : false
     });
+    useEffect(() => {
+        async function loadData(){
+             
+            await getSpace();
+            setLoading(false);
+        }
+        loadData();
+    },[userId])
     function handleClick(e:any){
         if(e.target.value === 'form'){
             setSpace({home:false , form : true , close:false})
@@ -37,8 +46,12 @@ function page() {
     const handleClose = ()=>{
         setSpace({home:true , form : false , close:false})
     }
+    if(loading){
 
-    if(space.form){
+        return (<div className='h-screen w-screen flex justify-center items-center'><Spinner className="h-16 w-16 text-blue-700" onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} /></div>)
+    }
+
+    else if(space.form){
 
         return (
             <div>

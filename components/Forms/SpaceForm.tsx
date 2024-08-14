@@ -1,5 +1,4 @@
 
-import axios from 'axios';
 import React, { useState } from 'react'
 
 
@@ -26,7 +25,6 @@ function SpaceForm({handleClick,setSpace,addSpace,userId}:{handleClick:any,setSp
       const handleSubmit = async () => {
         console.log(form);
         await addSpace(form);
-        // Update space state to control UI elements
         setSpace({ home: false, form: false, close: true });
       };
 

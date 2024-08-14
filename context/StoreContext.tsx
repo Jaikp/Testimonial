@@ -9,7 +9,7 @@ interface ReviewSpace {
 }
 
 interface StoreContextType {
-    url: string;
+    URL: string;
     addSpace: (prop: any) => Promise<void>;
     getSpace: () => Promise<void>;
     getReviewSpace: (prop: any) => Promise<void>;
@@ -29,7 +29,7 @@ export const StoreContext = createContext<StoreContextType | undefined>(undefine
 
 const StoreContextProvider = (props:any) => {
 
-    const url = 'http://localhost:3000/api/space';
+    const URL = process.env.NEXT_PUBLIC_URL || "";
     const [userId, setuserId] = useState('');
     const [spaces, setSpaces] = useState<any[]>([]);
     const [link, setlink] = useState<string>("");
@@ -37,24 +37,18 @@ const StoreContextProvider = (props:any) => {
     const [video, setVideo] = useState('')
     const [reviews, setReviews] = useState<any[]>([]);
 
-    useEffect(() => {
-        async function loadData(){
-             
-            await getSpace();
-        }
-        loadData();
-    },[userId])
+
 
 
     const getReviewSpace = async(prop:any)=>{
-        const response = await axios.post('http://localhost:3000/api/testimonial',prop);
+        const response = await axios.post(`${URL}/api/testimonial`,prop);
       
         setReviewSpace(response.data.data[0]);
       
     }
 
     const getSpace = async ()=>{
-        const response = await axios.get(url,{headers:{userId:userId}});
+        const response = await axios.get(`${URL}/api/space`,{headers:{userId:userId}});
         setSpaces(response.data.data);
         console.log(response.data.data);
     }
@@ -63,8 +57,7 @@ const StoreContextProvider = (props:any) => {
         console.log(prop);
         try {
 
-          const response = await axios.post(url,prop);
-    
+          const response = await axios.post(`${URL}/api/space`,prop);
             setlink(response.data.data.id);
           
         } catch (e) {
@@ -76,7 +69,7 @@ const StoreContextProvider = (props:any) => {
     const addReview = async (prop:any) => {
         console.log(prop);
         try {
-          const response = await axios.post('http://localhost:3000/api/review',prop);
+          const response = await axios.post(`${URL}/api/review`,prop);
         setlink(response.data.data.id);
           
         } catch (e) {
@@ -87,7 +80,7 @@ const StoreContextProvider = (props:any) => {
     };
     const getReview = async (prop:any) => {
         try {
-            const response = await axios.get('http://localhost:3000/api/review', {
+            const response = await axios.get(`${URL}/api/review`, {
                 headers: { spaceId: prop }
             });
             console.log(response.data.data);
@@ -136,7 +129,7 @@ const StoreContextProvider = (props:any) => {
     
 
     const contextVlaue : StoreContextType = {
-        url,
+        URL,
         addSpace,
         getSpace,
         getReviewSpace,

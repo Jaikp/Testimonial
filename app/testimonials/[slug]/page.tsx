@@ -3,6 +3,8 @@ import { StoreContext } from '@/context/StoreContext'
 import MuxUploader from '@mux/mux-uploader-react';
 import React, { useContext, useEffect, useState } from 'react'
 import { Rating } from "@material-tailwind/react";
+import { Spinner } from "@material-tailwind/react";
+ 
  
 function page({params}:{params:any}) { 
   
@@ -16,8 +18,8 @@ function page({params}:{params:any}) {
     const { getReviewSpace, reviewSpace, video, getendpoint, addReview } = context;
 
 
-  const [upload, setUpload] = useState('text');
-
+  const [upload, setUpload] = useState('');
+const [loading, setloading] = useState(true);
 
   const [form, setForm] = useState({
     spaceId : params.slug,
@@ -53,7 +55,7 @@ function page({params}:{params:any}) {
     
     const loadData = async ()=>{
       await getReviewSpace({id :params.slug});
-
+      setloading(false);
     }
     loadData();
 
@@ -75,9 +77,9 @@ function page({params}:{params:any}) {
     
   }
 
-  if(upload === 'record'){
+  if(loading){
 
-    return (<MuxUploader endpoint={video} />);
+    return (<div className='h-screen w-screen flex justify-center items-center'><Spinner className="h-16 w-16 text-blue-700" onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} /></div>)
   }
   
   return (
@@ -111,6 +113,7 @@ function page({params}:{params:any}) {
           </div>
           
       </div>
+      {upload === 'record' && <MuxUploader endpoint={video} />}
       {upload === 'text' ? (
       <>
         <div className='absolute top-0 left-0 w-full h-full bg-black opacity-50 z-10'></div>

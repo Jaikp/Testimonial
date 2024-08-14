@@ -5,6 +5,7 @@ import ReviewCard from '@/components/ReviewCard/ReviewCard';
 import Navbar from '@/components/Navbar/Navbar';
 import Footer from '@/components/Navbar/Footer';
 import { ClipboardCopyButton } from '@/components/Testimonials/Clipboard';
+import { Spinner } from '@material-tailwind/react';
 
 function Page({ params }: { params: any }) {
 
@@ -12,14 +13,16 @@ function Page({ params }: { params: any }) {
     if (!context) {
       throw new Error("StoreContext must be used within a StoreProvider");
    }
-    const { reviews , getReview} = context;    
+    const { reviews , getReview,URL} = context;    
     const [embed, setembed] = useState(false)
-    
+    const [loading, setLoading] = useState(true)
+    const fullurl = `${URL}/testimonials/${params.slug}`;
     useEffect(() => {
       
      const loadData = async ()=>{
 
         await getReview(params.slug);
+        setLoading(false);
      }
      loadData();
      console.log(reviews);
@@ -41,6 +44,10 @@ function Page({ params }: { params: any }) {
     const handleClick = ()=>{
       setembed(!embed);
     }
+    if(loading){
+
+        return (<div className='h-screen w-screen flex justify-center items-center'><Spinner className="h-16 w-16 text-blue-700" onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} /></div>)
+      }
 
     return (
         <div className='relative'>
@@ -50,9 +57,9 @@ function Page({ params }: { params: any }) {
                 <div>
                     <h1 className='text-4xl'>Testimonial</h1>
                     <p className='text-sm font-light'>
-                        Space public URL: 
-                        <a href={`http://localhost:3000/testimonials/${params.slug}`} className='text-blue-600 underline'>
-                            http://localhost:3000/testimonials/{params.slug}
+                        Space public URL :
+                        <a href={fullurl} className='text-blue-600 underline pl-2'>
+                            {fullurl}
                         </a>
                     </p>
                 </div>

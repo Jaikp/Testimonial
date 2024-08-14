@@ -1,25 +1,30 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '../../../utils/prisma';
+import { error } from 'console';
 
 
  async function POST(req: NextRequest) {
-    const {name,header,message,Question,userId} = await req.json();
 
-    try{const response = await prisma.space.create({
+    const {name,header,message,Question,userId} = await req.json();
+  
+    try{
+        const response = await prisma.space.create({
         data : {
             name,
-            userId,
+            userId : Number(userId),
             header,
             message,
             Question
         }
+        
     })
     return NextResponse.json({ message: "Space Created" , data: response });
     
     }
     catch(e){
-        return NextResponse.json({ message: "Failed" });
+        console.log(e);
+        return NextResponse.json({ message: "Failed", error : e });
     }
 }
 
