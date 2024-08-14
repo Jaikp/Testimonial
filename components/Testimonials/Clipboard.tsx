@@ -7,7 +7,7 @@ import { CheckIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 export function ClipboardCopyButton({spaceId}:{spaceId:any}) {
   const [value, copy] = useCopyToClipboard();
   const [copied, setCopied] = React.useState(false);
-  const iframeCode = `<iframe src="${process.env.NEXT_PUBLIC_URL}/${spaceId}/${spaceId}" width="100%" height="100vh" title="testimonial"></iframe>`;
+  const iframeCode = `<iframe src="${process.env.NEXT_PUBLIC_URL}/embeds/${spaceId}" width="100%" height="1000" title="testimonial"></iframe>`;
   return (
     <Button
       onMouseLeave={() => setCopied(false)}

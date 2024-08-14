@@ -121,7 +121,6 @@ function page() {
  
     </div>
     </div>
-    
     <Footer/>
     </div>
     )
