@@ -73,7 +73,8 @@ export const NEXTAUTH = {
                   },
                 });
               }
-      
+              console.log(existingUser);
+              user.id = existingUser.id;
               return true;
             }
       
@@ -81,7 +82,7 @@ export const NEXTAUTH = {
           },
         session: ({ session, token, user }: any) => {
             if (session.user) {
-              console.log(session);
+              console.log(token);
                 session.user.id = token.sub
             }
             return session
