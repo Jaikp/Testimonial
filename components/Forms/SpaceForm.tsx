@@ -3,13 +3,51 @@ import React, { useState } from 'react'
 
 
 function SpaceForm({handleClick,setSpace,addSpace,userId}:{handleClick:any,setSpace:any,addSpace:any,userId:any}) {
-    const [form, setForm] = useState({
+
+    interface Form {
+        userId : any,
+        name : string,
+        header : string,
+        message : string,
+        Question : any[]
+    }
+
+    const [form, setForm] = useState<Form>({
         userId : userId,
         name : "",
         header : "",
         message : "",
-        Question : {}
+        Question : [{id:1 , question:"Who are you / what are you working on?"},
+            {id:2 , question:"How has [our product / service] helped you?"},
+            {id:3 , question:"What is the best thing about [our product / service]"}
+        ]
     })
+
+    const addQuestion = ()=>{
+        setForm(prevForm=>({
+            ...prevForm,
+            Question : [...prevForm.Question,{id:Date.now(),question:" "}]
+        }));
+    }
+
+    const handleQuestionChange = (id: number,value: string)=>{
+
+        setForm(prevForm=>({
+            ...prevForm,
+            Question : prevForm.Question.map(q=>
+                q.id === id ? {...q , question:value} : q
+            )
+        }))
+
+    }
+
+    const deleteQuestion = (id:number)=>{
+
+        setForm(prevForm=>({
+            ...prevForm,
+            Question : prevForm.Question.filter(q=> q.id!=id)
+        }))
+    }
 
     const handleChange = (e : any) => {
         e.preventDefault();
@@ -30,9 +68,13 @@ function SpaceForm({handleClick,setSpace,addSpace,userId}:{handleClick:any,setSp
 
 
   return (
-    <div className=' bg-slate-400 text-black h-screen pt-20'>
-    <div className='mx-60 bg-white flex rounded py-4'>
-        <div className='p-4 mt-8'>
+    <div className='text-black bg-[#D8E0EA] h-fit pb-20 pt-20'>
+    <div className='mx-5 2xl:mx-52 bg-[#FFFFFF] rounded flex flex-col items-center py-4 shadow-2xl' >
+        <div onClick={handleClick} className='px-4 cursor-pointer w-full text-end right-0'>
+            X
+        </div>
+        <div className='flex flex-col md:flex-row'>
+        <div className='p-4 md:mt-8'>
             <div className='border p-4 rounded-md py-10'>
                 <div className='text-center mt-40'>
                     <h1 className='mb-2 text-3xl'>{form.header ? form.header : "Header goes here.."}</h1>
@@ -40,9 +82,14 @@ function SpaceForm({handleClick,setSpace,addSpace,userId}:{handleClick:any,setSp
                 </div>
                 <div className='mt-10 mb-12'>
                     <p className='text-xl mb-4'>Questions</p>
-                    <p className='ml-4 mb-1'>Who are you / what are you working on?</p>
-                    <p className='ml-4 mb-1'>How has [our product / service] helped you?</p>
-                    <p  className='ml-4 mb-1'>What is the best thing about [our product / service]</p>
+                    {form.Question.map((q)=>(
+                    <div className='ml-4 mb-1 flex gap-2 font-light'>
+                        <p>•</p>
+                        <p>{q.question}</p>
+                    </div>
+                    
+                    
+            ))}
                 </div>
                 <button className='bg-blue-600 w-full p-2 text-white rounded mb-2' >Record a video</button>
                 <button className='bg-black w-full p-2 text-white rounded'>Send in text</button>
@@ -65,12 +112,30 @@ function SpaceForm({handleClick,setSpace,addSpace,userId}:{handleClick:any,setSp
             <input onChange={handleChange} name='header' className='border w-full rounded h-10 mt-2 border-gray-400 mb-8 bg-white p-2'></input>
             
             <p>Your custom message</p>
+            
             <textarea onChange={handleChange} name='message' className='border w-full rounded h-20 mt-2 border-gray-400 mb-8 p-2 bg-white' placeholder='Write a war message to your customer'></textarea>
+            
+            <div>
+            <p>Questions</p>
+            {form.Question.map((q)=>(
+                
+                <div key={q.id} className='flex items-center gap-2 cursor-pointer p-2'> 
+                    <i className="fi fi-br-menu-dots-vertical text-xl h-full flex items-center"></i>
+                    <input onChange={(e)=>handleQuestionChange(q.id , e.target.value)} name='Question' value={q.question} className='border w-full rounded h-10 border-gray-400 bg-white p-2'></input>
+                    <i onClick={()=>deleteQuestion(q.id)} className="fi fi-rr-trash text-xl cursor-pointer flex items-center"></i>
+                </div> 
+            ))}
+                <div className='flex items-center'>
+                    <i onClick={addQuestion} className="fi fi-rr-add p-2 text-lg font-normal flex items-center cursor-pointer"></i>
+                    <div className='text-sm'>
+                        Add
+                    </div>
+                </div>
+                
+            </div>
 
             <button onClick={handleSubmit} className='bg-blue-500 w-full text-white p-4 rounded'>Create new space</button>
         </div>
-        <div onClick={handleClick} className='px-4 cursor-pointer'>
-            X
         </div>
     </div>
     </div>

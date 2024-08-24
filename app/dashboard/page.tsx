@@ -14,7 +14,6 @@ function page() {
     const router = useRouter();
     const context = useContext(StoreContext);
     
-    // Ensure context is not undefined
     if (!context) {
        throw new Error("StoreContext must be used within a StoreProvider");
     }
@@ -70,32 +69,19 @@ function page() {
     (
         <div>
             <Navbar/>
-    <div className=' text-white mx-72 mb-0'>
+    <div className=' text-white 2xl:mx-52 lg:mx-4 md:mx-4 mx-2 mb-0'>
     <div className='mt-52'>
-
-        <div className='flex items-center justify-between' >
-            <div className=' text-wrap mr-2 '>
-                <h1 className='text-4xl mb-2'>Here's a quick demo for you 👉</h1>
-                <p className='text-xl mb-2'>You will find everything you need to get started to collect testimonials and build a wall of love</p>
-                <button className='p-2 bg-white text-black rounded'>Dismiss</button>
-            </div>
-            <div className='' >
-                <div className='bg-slate-600 w-72 h-60'></div>
-            </div>
-            
-        </div>
-        <hr className='mt-40 border-[#33363B]'/>
         <h1 className='text-3xl mt-14 mb-5'>Overview</h1>
-        <div className='flex gap-5'>
-            <div className='w-1/3 bg-[#26282C] rounded-md h-20 p-4'>
+        <div className='flex gap-5 lg:flex-nowrap flex-wrap md:flex-rap'>
+            <div className='md:w-[48.5%] w-full lg:w-1/3 bg-[#26282C] rounded-md h-20 p-4 border-gray-700 border'>
                 <p>videos</p>
                 <p>0</p>
             </div>
-            <div className='w-1/3 bg-[#26282C] rounded-md h-20 p-4'>
+            <div className='md:w-[48.5%] w-full lg:w-1/3 bg-[#26282C] rounded-md h-20 p-4 border-gray-700 border'>
                 <p>video credits</p>
                 <p>0</p>
             </div>
-            <div className='w-1/3 bg-[#26282C] rounded-md h-20 p-4'>
+            <div className='md:w-[48.5%] w-full lg:w-1/3 bg-[#26282C] rounded-md h-20 p-4 border-gray-700 border'>
                 <p>Plan</p>
                 <p>Free Plan</p>
             </div>

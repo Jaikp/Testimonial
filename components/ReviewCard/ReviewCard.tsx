@@ -4,7 +4,7 @@ import React from 'react'
 
 function ReviewCard({review}:{review:any}) {
   return (
-    <div className='w-[800px] bg-[#26282C] pt-8 px-12 mb-5 rounded-lg pb-10 hover:bg-[#33363B]'>
+    <div className=' bg-[#26282C] pt-8 px-12 mb-5 rounded-lg pb-10 hover:bg-[#33363B]'>
         <div className='flex content-center'>
             <div className='bg-[#DCEAFE] rounded-full px-3 text-[#2363EB]'>
                 Text

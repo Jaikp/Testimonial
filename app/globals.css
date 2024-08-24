@@ -5,7 +5,7 @@
 @import "~@flaticon/flaticon-uicons/css/all/all";
 
 
-body {
+:root {
   background-color: #151719;
   color : white;
   font-family: Inter, sans-serif;

@@ -15,7 +15,6 @@ export const NEXTAUTH = {
 
           async authorize (credentials:any){
             const hashedPassword = await bcrypt.hash(credentials.password, 10);
-            console.log(credentials);
             const existinguser = await prisma.user.findUnique({
               where: { email: credentials.email },
             });

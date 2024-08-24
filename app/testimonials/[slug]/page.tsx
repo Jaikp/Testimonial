@@ -20,7 +20,6 @@ function page({params}:{params:any}) {
 
   const [upload, setUpload] = useState('');
 const [loading, setloading] = useState(true);
-
   const [form, setForm] = useState({
     spaceId : params.slug,
     name : "",
@@ -49,8 +48,6 @@ const [loading, setloading] = useState(true);
     }));
   };
 
-  
-
   useEffect(() => {
     
     const loadData = async ()=>{
@@ -67,14 +64,15 @@ const [loading, setloading] = useState(true);
       await getendpoint();
       setUpload(e.target.name);
     }
-    else if(e.target.name==='send'){
-      await addReview(form);
-      setUpload('');
-    }
     else{
       setUpload(e.target.name);
     }
     
+  }
+  async function handleSubmit(e:any){
+      
+      await addReview(form);
+      
   }
 
   if(loading){
@@ -87,20 +85,21 @@ const [loading, setloading] = useState(true);
       <div className='z-0'>
         <h1 className='pl-8 pt-4 text-2xl from-neutral-500'>Testimonial</h1>
       </div>
-      <div className='items-center w-1/2 m-auto mt-20 z-0'>
+      <div className='flex-col justify-center p-4 w-fit m-auto mt-20 z-0'>
           <div className='w-32 h-32 bg-slate-400 m-auto'>
 
           </div>
           <h1 className='text-5xl text-center mt-10'>{reviewSpace.header}</h1>
           <p className='text-xl text-center mt-5'>{reviewSpace.message}</p>
 
-          <div className=' p-2 mt-8 mx-52'>
-            <p className='text-xl'>Questions</p>
+          <div className='p-2 w-fit items-center'>
+            <p className='text-xl w-fit'>Questions</p>
             <hr className='w-5 border-blue-500 border-2'/>
-            <ul className='text-md font-light mt-2 list-disc ml-4'>
-              <li>Who are you / what are you working on?</li>
-              <li>How has [our product / service] helped you?</li>
-              <li>What is the best thing about [our product / service]</li>
+            <ul className='text-md font-light mt-2 list-disc w-fit'>
+              
+            {reviewSpace.Question?.map((q: any, index: number) => (
+                  <li className='w-fit' key={index}>{q.question}</li>
+            ))}
             </ul>
           </div>
           <div className='flex justify-center gap-4 mt-12'>
@@ -117,18 +116,21 @@ const [loading, setloading] = useState(true);
       {upload === 'text' ? (
       <>
         <div className='absolute top-0 left-0 w-full h-full bg-black opacity-50 z-10'></div>
-        <div className='absolute bg-white w-1/4 h-fit top-32 z-20 left-[37.5%] items-center p-2 rounded'>
+        <div className='flex justify-center items-center'>
+          
+        <div className='absolute bg-white w-fit h-fit md:w-1/2 lg:w-1/3 top-32 z-20 items-center p-2 rounded mx-2'>
             <div className='flex justify-end w-full'>
               <div onClick={()=>{setUpload("")}} className='cursor-pointer text-xl'>✗</div>
             </div>
+            <form onSubmit={handleSubmit}>
             <div className='px-2'>
               <h1 className='font-semibold text-xl'>Write text testimonial too</h1>
               <p className='text-xl mt-4'>Questions</p>
               <hr className='w-5 border-blue-500 border-2'/>
               <ul className='text-md font-light mt-2 list-disc ml-4'>
-                <li>Who are you / what are you working on?</li>
-                <li>How has [our product / service] helped you?</li>
-                <li>What is the best thing about [our product / service]</li>
+              {reviewSpace.Question?.map((q: any, index: number) => (
+                  <li className='w-fit' key={index}>{q.question}</li>
+            ))}
               </ul>
               
               <Rating value={Number(form.rating)} onChange={handleRatingChange} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}  />
@@ -142,15 +144,17 @@ const [loading, setloading] = useState(true);
 
               <div className='flex mt-4'>
                 <div className='bg-white mr-2'>
-                  <input className='bg-white border rounded' type='checkbox'></input>
+                  <input className='bg-white border rounded' type='checkbox' required></input>
                 </div>
                 <div>I give permission to use this testimonial across social channels and other marketing efforts</div>
               </div>
               <div className='flex justify-end gap-2 mt-4'>
-                <button onClick={handleClick} className='bg-white border border-gray-500 rounded p-2 w-20' name=''>Cancel</button>
-                <button onClick={handleClick} className='bg-blue-500 border border-gray-500 rounded p-2 text-white w-20' name='send'>Send</button>
+                <button type='button' onClick={handleClick} className='bg-white border border-gray-500 rounded p-2 w-20' name=''>Cancel</button>
+                <button type='submit' className='bg-blue-500 border border-gray-500 rounded p-2 text-white w-20' name='send'>Send</button>
               </div>
             </div>
+            </form>
+        </div>
         </div>
       </>
       ) : (

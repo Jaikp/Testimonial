@@ -2,9 +2,14 @@
 import { createContext, useState } from "react";
 import { useEffect } from "react";
 import axios from 'axios';
+interface Question {
+    id : number;
+    question : string;
+}
 interface ReviewSpace {
     header?: string;
     message?: string;
+    Question?: Question[];
     // Add other fields as necessary
 }
 
@@ -43,7 +48,17 @@ const StoreContextProvider = (props:any) => {
     const getReviewSpace = async(prop:any)=>{
         const response = await axios.post(`${URL}/api/testimonial`,prop);
       
-        setReviewSpace(response.data.data[0]);
+        const data = response.data.data[0];
+
+        // Ensure `Question` is an array
+        const questions = Array.isArray(data.Question) ? data.Question : [];
+
+        setReviewSpace({
+            ...data,
+            Question: questions
+        });
+
+        console.log(data);
       
     }
 

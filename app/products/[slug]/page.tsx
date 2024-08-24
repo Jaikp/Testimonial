@@ -35,7 +35,6 @@ function Page({ params }: { params: any }) {
             document.body.style.overflow = 'auto';
         }
 
-        // Cleanup on unmount
         return () => {
             document.body.style.overflow = 'auto';
         };
@@ -53,7 +52,7 @@ function Page({ params }: { params: any }) {
         <div className='relative'>
             <Navbar/>
             <hr className='mt-10 border border-[#33363B]'/>
-            <div className='flex justify-between px-32 my-8 items-center'>
+            <div className='flex flex-col md:flex-row justify-between px-5 gap-2 md:px-32 my-8 items-center'>
                 <div>
                     <h1 className='text-4xl'>Testimonial</h1>
                     <p className='text-sm font-light'>
@@ -68,8 +67,8 @@ function Page({ params }: { params: any }) {
                 </div>
             </div>
             <hr className='mt-4 border border-[#33363B]'/>
-            <div className='flex mt-10'>
-                <div className='pl-36'>
+            <div className='flex flex-col md:flex-row mt-10'>
+                <div className='xl:pl-36 px-5'>
                     <h1 className='text-1xl font-semibold mb-4'>INBOX</h1>
                     <ul className='list-disc ml-4'>
                         <li className='mb-2'>All</li>
@@ -98,7 +97,7 @@ function Page({ params }: { params: any }) {
                         <li className='mb-2'>📈 Metrics</li>
                     </ul>
                 </div>
-                <div className='m-auto'>
+                <div className='w-full px-5 xl:px-52 md:px-20'>
                     {reviews.length === 0 ?(<>hello</>):(<>
                     {reviews.map((review,index)=>(
                         <ReviewCard key={index} review={review}/>
