@@ -9,14 +9,16 @@ function page({params}:{params:any}) {
   if (!context) {
     throw new Error("StoreContext must be used within a StoreProvider");
  }
-    const { reviews , getReview } = context;    
+    const {getReview } = context;    
     const [loading, setLoading] = useState(true);
+    const [reviews, setreviews] = useState([])
     
     useEffect(() => {
       
      const loadData = async ()=>{
 
-        await getReview(params.slug);
+        const response:any = await getReview(params.slug);
+        setreviews(response);
         setLoading(false);
      }
      loadData();
