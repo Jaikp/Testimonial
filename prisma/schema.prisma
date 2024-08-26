@@ -43,5 +43,6 @@ model Review{
   createdAt DateTime  @default(now())
   spaceId   String
   rating    String
+  favourite Boolean   @default(false)
   space     Space     @relation(fields: [spaceId], references: [id])
 }

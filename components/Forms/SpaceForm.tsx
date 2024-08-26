@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 
 
-function SpaceForm({handleClick,setSpace,addSpace,userId}:{handleClick:any,setSpace:any,addSpace:any,userId:any}) {
+function SpaceForm({handleClick,setSpace,addSpace,userId,addGpt}:{handleClick:any,setSpace:any,addSpace:any,userId:any,addGpt:any}) {
 
     interface Form {
         userId : any,
@@ -11,7 +11,8 @@ function SpaceForm({handleClick,setSpace,addSpace,userId}:{handleClick:any,setSp
         message : string,
         Question : any[]
     }
-
+    const [GPT, setGPT] = useState("")
+    const [loader, setloader] = useState(false);
     const [form, setForm] = useState<Form>({
         userId : userId,
         name : "",
@@ -49,6 +50,20 @@ function SpaceForm({handleClick,setSpace,addSpace,userId}:{handleClick:any,setSp
         }))
     }
 
+    const handleGPT = async (e:any)=>{
+        setloader(true);
+        const form = await addGpt(GPT);
+        setloader(false);
+        setForm({
+            userId : userId,
+            name : form.name,
+            header : form.header,
+            message : form.message,
+            Question : form.questions
+        })
+        console.log(form);
+    }
+
     const handleChange = (e : any) => {
         e.preventDefault();
     
@@ -74,7 +89,7 @@ function SpaceForm({handleClick,setSpace,addSpace,userId}:{handleClick:any,setSp
             X
         </div>
         <div className='flex flex-col md:flex-row'>
-        <div className='p-4 md:mt-8'>
+        <div className='p-4 md:mt-8 md:max-w-lg'>
             <div className='border p-4 rounded-md py-10'>
                 <div className='text-center mt-40'>
                     <h1 className='mb-2 text-3xl'>{form.header ? form.header : "Header goes here.."}</h1>
@@ -104,16 +119,20 @@ function SpaceForm({handleClick,setSpace,addSpace,userId}:{handleClick:any,setSp
                 <h1 className='text-3xl mb-4'>Create new Space</h1>
                 <p className='font-light'>After the Space is created, it will generate a dedicated page for collecting testimonials.</p>
             </div>
-
+            <p className='mb-2'>AI Space Creator</p>
+            <div className='flex h-fit gap-2 items-center mb-4'>
+                <input onChange={(e)=>setGPT(e.target.value)} name='GPT' className='border w-full rounded h-10 border-gray-400 bg-white p-2'></input>
+                <button onClick={handleGPT} className='bg-blue-500 text-white rounded h-fit p-2'>{loader ? (<>Processing...</>):(<>Generate</>)}</button>
+            </div>
             <p>Space name</p>
-            <input onChange={handleChange} name='name' className='border w-full rounded h-10 mt-2 border-gray-400 mb-8 bg-white p-2'></input>
+            <input onChange={handleChange} name='name' value={form.name} className='border w-full rounded h-10 mt-2 border-gray-400 mb-8 bg-white p-2'></input>
 
             <p>Header Title</p>
-            <input onChange={handleChange} name='header' className='border w-full rounded h-10 mt-2 border-gray-400 mb-8 bg-white p-2'></input>
+            <input onChange={handleChange} name='header' value={form.header} className='border w-full rounded h-10 mt-2 border-gray-400 mb-8 bg-white p-2'></input>
             
             <p>Your custom message</p>
             
-            <textarea onChange={handleChange} name='message' className='border w-full rounded h-20 mt-2 border-gray-400 mb-8 p-2 bg-white' placeholder='Write a war message to your customer'></textarea>
+            <textarea onChange={handleChange} name='message' value={form.message} className='border w-full rounded h-20 mt-2 border-gray-400 mb-8 p-2 bg-white' placeholder='Write a war message to your customer'></textarea>
             
             <div>
             <p>Questions</p>

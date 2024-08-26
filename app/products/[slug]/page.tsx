@@ -28,6 +28,7 @@ function Page({ params }: { params: any }) {
      console.log(reviews);
       
     },[])
+
     useEffect(() => {
         if (embed) {
             document.body.style.overflow = 'hidden';

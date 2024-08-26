@@ -28,6 +28,8 @@ interface StoreContextType {
     addReview: (prop: any) => Promise<void>;
     getReview: (prop: any) => Promise<void>;
     reviews: any[];
+    addGpt: (prop: any) => Promise<void>;
+    formdata: any;
 }
 
 export const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -41,31 +43,23 @@ const StoreContextProvider = (props:any) => {
     const [reviewSpace, setReviewSpace] = useState<ReviewSpace>({});
     const [video, setVideo] = useState('')
     const [reviews, setReviews] = useState<any[]>([]);
-
-
-
+    const [formdata, setFormdata] = useState<any[]>([])
 
     const getReviewSpace = async(prop:any)=>{
         const response = await axios.post(`${URL}/api/testimonial`,prop);
-      
-        const data = response.data.data[0];
 
-        // Ensure `Question` is an array
+        const data = response.data.data[0];
         const questions = Array.isArray(data.Question) ? data.Question : [];
 
         setReviewSpace({
             ...data,
             Question: questions
         });
-
-        console.log(data);
-      
     }
 
     const getSpace = async ()=>{
         const response = await axios.get(`${URL}/api/space`,{headers:{userId:userId}});
         setSpaces(response.data.data);
-        console.log(response.data.data);
     }
 
     const addSpace = async (prop:any) => {
@@ -82,7 +76,6 @@ const StoreContextProvider = (props:any) => {
     
     };
     const addReview = async (prop:any) => {
-        console.log(prop);
         try {
           const response = await axios.post(`${URL}/api/review`,prop);
         setlink(response.data.data.id);
@@ -98,13 +91,40 @@ const StoreContextProvider = (props:any) => {
             const response = await axios.get(`${URL}/api/review`, {
                 headers: { spaceId: prop }
             });
-            console.log(response.data.data);
+            
             setReviews(response.data.data);
 
         } catch (error) {
 
             console.error('Error fetching reviews:', error);
 
+        }
+    }
+
+    const updateReview = async (prop:any) => {
+        try {
+            
+            
+
+
+        } catch (error) {
+            
+        }
+    }
+    useEffect(() => {
+      
+      
+    }, [])
+    
+    const addGpt = async (prop:any) => {
+        try {
+            const response = await axios.post(`${URL}/api/genai`,{
+                "name": prop
+            });
+            return response.data.data;
+        } catch (error) {
+
+            console.log(error);
         }
     }
     
@@ -157,7 +177,9 @@ const StoreContextProvider = (props:any) => {
         addReview,
         getReview,
         reviews,
-        reviewSpace
+        reviewSpace,
+        addGpt,
+        formdata,
     }
 
     return (

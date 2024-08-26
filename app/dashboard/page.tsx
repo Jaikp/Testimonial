@@ -18,7 +18,7 @@ function page() {
        throw new Error("StoreContext must be used within a StoreProvider");
     }
 
-    const {link,spaces,addSpace,userId,getSpace} = context;
+    const {link,spaces,addSpace,userId,getSpace,addGpt,formdata} = context;
     const [loading, setLoading] = useState(true);
     const [space, setSpace] = useState({
         home : true,
@@ -54,7 +54,7 @@ function page() {
 
         return (
             <div>
-                <SpaceForm handleClick={handleClick} setSpace={setSpace} addSpace={addSpace} userId={userId}/>
+                <SpaceForm handleClick={handleClick} setSpace={setSpace} addSpace={addSpace} userId={userId} addGpt={addGpt}/>
             </div>
         )
     }
