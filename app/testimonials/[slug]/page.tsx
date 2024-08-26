@@ -86,7 +86,7 @@ const [loading, setloading] = useState(true);
   return (
     <div className='bg-white h-screen text-black relative'>
       <div className='z-0'>
-        <h1 className='pl-8 pt-4 text-2xl from-neutral-500 '>Endorser</h1>
+        <h1 className='pl-8 pt-4 text-2xl from-neutral-500 font-semibold '>Endorser</h1>
       </div>
       <div className='flex justify-center items-center h-full '>
       <div className='flex-col justify-center py-4 px-8 w-fit max-w-2xl z-0'>
