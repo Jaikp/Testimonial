@@ -99,11 +99,11 @@ function Page({ params }: { params: any }) {
                     </ul>
                 </div>
                 <div className='w-full px-5 xl:px-52 md:px-20'>
-                    {reviews?.length === 0 ?(<>hello</>):(<>
+                    
                     {reviews?.map((review,index)=>(
                         <ReviewCard key={index} review={review}/>
                     ))}
-                    </>)}
+                    
                 </div>
             </div>
             {embed?(<>
