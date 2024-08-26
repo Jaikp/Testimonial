@@ -92,7 +92,7 @@ const StoreContextProvider = (props:any) => {
                 headers: { spaceId: prop }
             });
             
-            setReviews(response.data.data);
+            return response.data.data;
 
         } catch (error) {
 
