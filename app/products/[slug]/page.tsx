@@ -102,7 +102,7 @@ function Page({ params }: { params: any }) {
                 </div>
                 <div className='w-full px-5 xl:px-52 md:px-20'>
                     
-                    {reviews?.map((review,index)=>(
+                    {reviews.map((review,index)=>(
                         <ReviewCard key={index} review={review}/>
                     ))}
                     
