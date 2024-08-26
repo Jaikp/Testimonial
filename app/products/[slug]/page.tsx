@@ -29,7 +29,7 @@ function Page({ params }: { params: any }) {
      loadData();
      
       
-    },[])
+    },[reviews])
 
     useEffect(() => {
         if (embed) {

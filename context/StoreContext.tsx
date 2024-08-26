@@ -27,9 +27,7 @@ interface StoreContextType {
     userId: string;
     addReview: (prop: any) => Promise<void>;
     getReview: (prop: any) => Promise<void>;
-    reviews: any[];
     addGpt: (prop: any) => Promise<void>;
-    formdata: any;
 }
 
 export const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -41,9 +39,7 @@ const StoreContextProvider = (props:any) => {
     const [spaces, setSpaces] = useState<any[]>([]);
     const [link, setlink] = useState<string>("");
     const [reviewSpace, setReviewSpace] = useState<ReviewSpace>({});
-    const [video, setVideo] = useState('')
-    const [reviews, setReviews] = useState<any[]>([]);
-    const [formdata, setFormdata] = useState<any[]>([])
+    const [video, setVideo] = useState('');
 
     const getReviewSpace = async(prop:any)=>{
         const response = await axios.post(`${URL}/api/testimonial`,prop);
@@ -75,6 +71,7 @@ const StoreContextProvider = (props:any) => {
         }
     
     };
+
     const addReview = async (prop:any) => {
         try {
           const response = await axios.post(`${URL}/api/review`,prop);
@@ -86,6 +83,7 @@ const StoreContextProvider = (props:any) => {
         }
     
     };
+
     const getReview = async (prop:any) => {
         try {
             const response = await axios.get(`${URL}/api/review`, {
@@ -176,10 +174,8 @@ const StoreContextProvider = (props:any) => {
         userId,
         addReview,
         getReview,
-        reviews,
         reviewSpace,
         addGpt,
-        formdata,
     }
 
     return (
