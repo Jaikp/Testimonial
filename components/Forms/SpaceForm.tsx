@@ -97,14 +97,12 @@ function SpaceForm({handleClick,setSpace,addSpace,userId,addGpt}:{handleClick:an
                 </div>
                 <div className='mt-10 mb-12'>
                     <p className='text-xl mb-4'>Questions</p>
-                    {form.Question.map((q)=>(
-                    <div className='ml-4 mb-1 flex gap-2 font-light'>
-                        <p>•</p>
-                        <p>{q.question}</p>
-                    </div>
-                    
-                    
-            ))}
+                    {form.Question?.map((q)=>(
+                        <div className='ml-4 mb-1 flex gap-2 font-light'>
+                            <p>•</p>
+                            <p>{q.question}</p>
+                        </div>
+                    ))}
                 </div>
                 <button className='bg-blue-600 w-full p-2 text-white rounded mb-2' >Record a video</button>
                 <button className='bg-black w-full p-2 text-white rounded'>Send in text</button>
@@ -136,7 +134,7 @@ function SpaceForm({handleClick,setSpace,addSpace,userId,addGpt}:{handleClick:an
             
             <div>
             <p>Questions</p>
-            {form.Question.map((q)=>(
+            {form.Question?.map((q)=>(
                 
                 <div key={q.id} className='flex items-center gap-2 cursor-pointer p-2'> 
                     <i className="fi fi-br-menu-dots-vertical text-xl h-full flex items-center"></i>
