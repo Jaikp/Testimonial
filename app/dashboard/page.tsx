@@ -32,7 +32,7 @@ function page() {
             setLoading(false);
         }
         loadData();
-    },[userId,spaces])
+    },[userId])
     function handleClick(e:any){
         if(e.target.value === 'form'){
             setSpace({home:false , form : true , close:false})
