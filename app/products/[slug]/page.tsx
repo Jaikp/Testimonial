@@ -16,7 +16,7 @@ function Page({ params }: { params: any }) {
     const {getReview,URL} = context;    
     const [embed, setembed] = useState(false)
     const [loading, setLoading] = useState(true)
-    const [reviews, setReviews] = useState([])
+    const [reviews, setReviews] = useState<any[]>([])
     const fullurl = `${URL}/testimonials/${params.slug}`;
     useEffect(() => {
       
