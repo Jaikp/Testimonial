@@ -35,8 +35,8 @@ async function GET(req: NextRequest) {
         })
         return NextResponse.json({ message: "Reviews" , data: response });
     }
-    catch(e){
-        return NextResponse.json({ message: "Failes" });
+    catch(error){
+        return NextResponse.json({ message: "Failes", data: error });
     }
 }
 

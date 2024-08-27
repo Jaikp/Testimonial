@@ -7,6 +7,14 @@ import Footer from '@/components/Navbar/Footer';
 import { ClipboardCopyButton } from '@/components/Testimonials/Clipboard';
 import { Spinner } from '@material-tailwind/react';
 
+interface Reviews {
+    name: string;
+    email: string;
+    content: string;
+    favourite : boolean;
+    createdAt : any;
+    rating: string;
+}
 function Page({ params }: { params: any }) {
 
     const context = useContext(StoreContext);
@@ -16,13 +24,14 @@ function Page({ params }: { params: any }) {
     const {getReview,URL} = context;    
     const [embed, setembed] = useState(false)
     const [loading, setLoading] = useState(true)
-    const [reviews, setReviews] = useState<any[]>([])
+    const [reviews, setReviews] = useState<Reviews[]>([])
     const fullurl = `${URL}/testimonials/${params.slug}`;
     useEffect(() => {
       
      const loadData = async ()=>{
 
         const response : any = await getReview(params.slug);
+        console.log(response);
         setReviews(response);
         setLoading(false);
      }
