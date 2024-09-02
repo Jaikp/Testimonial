@@ -21,8 +21,8 @@ function Navbar() {
 
   return (
     <div className='mx-10 pt-5 flex justify-between'>
-        <div onClick={()=> router.push('/dashboard')}>
-            <h1 className='text-4xl cursor-pointer'>Testimonial</h1> 
+        <div>
+            <button onClick={()=> router.push('/dashboard')} className='text-4xl cursor-pointer'>Endorser</button> 
         </div>
         <div className=''>
         <div>

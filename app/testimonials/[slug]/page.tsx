@@ -5,6 +5,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Rating } from "@material-tailwind/react";
 import { Spinner } from "@material-tailwind/react";
 import { Outfit } from 'next/font/google';
+import RecordView from '@/components/Record/RecordView';
 
 const outfit = Outfit({ subsets: ["latin"] });
  
@@ -114,10 +115,35 @@ const [loading, setloading] = useState(true);
           </div>
           </div> 
       </div>
-      {upload === 'record' && <MuxUploader endpoint={video} />}
+      {upload === 'record' && (
+  <>
+  <div onClick={()=>{setUpload('')}} className='absolute top-0 left-0 w-full h-full bg-black opacity-50 z-10'></div>
+  <div className='flex justify-center'>
+  <div className='absolute z-20 top-1/4 bg-white shadow-lg p-2 rounded-md'>
+          <div className='px-2'>
+            <h1 className='font-semibold text-xl'>Record video testimonial</h1>
+              <p className='text-xl mt-4 mb-1'>Questions</p>
+              <hr className='w-10 border-teal-500 border-2'/>
+              <ul className='text-md font-light mt-2 list-disc ml-4 mb-4'>
+              {reviewSpace.Question?.map((q: any, index: number) => (
+                  <li className='w-fit text-gray-600 text-sm mb-1' key={index}>{q.question}</li>
+            ))}
+              </ul>
+              
+              <Rating value={Number(form.rating)} onChange={handleRatingChange} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}  />
+              </div>
+    <RecordView />
+        <div className='flex justify-end mt-2'>   
+          <button onClick={()=>{setUpload('')}} className='bg-teal-600 hover:bg-teal-800 text-white px-4 py-2 rounded'>Submit</button>
+        </div> 
+  </div>
+  </div>
+</>
+)}
+
       {upload === 'text' ? (
       <>
-        <div className='absolute top-0 left-0 w-full h-full bg-black opacity-50 z-10'></div>
+        <div onClick={()=>{setUpload('')}} className='absolute top-0 left-0 w-full h-full bg-black opacity-50 z-10'></div>
         <div className='flex justify-center items-center'>
           
         <div className='absolute bg-white w-fit h-fit md:w-1/2 lg:w-1/3 top-32 z-20 items-center p-4 rounded-md mx-2'>
