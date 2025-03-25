@@ -10,7 +10,6 @@ interface ReviewSpace {
     header?: string;
     message?: string;
     Question?: Question[];
-    // Add other fields as necessary
 }
 
 interface StoreContextType {
@@ -21,7 +20,6 @@ interface StoreContextType {
     reviewSpace: ReviewSpace;
     link: string;
     spaces: any[];
-    getendpoint: () => Promise<void>;
     video: string;
     setuserId: (id: string) => void;
     userId: string;
@@ -109,10 +107,6 @@ const StoreContextProvider = (props:any) => {
             
         }
     }
-    useEffect(() => {
-      
-      
-    }, [])
     
     const addGpt = async (prop:any) => {
         try {
@@ -127,38 +121,6 @@ const StoreContextProvider = (props:any) => {
     }
     
 
-    const getendpoint = async()=> {
-
-                const muxTokenId = process.env.MUX_TOKEN_ID;
-                const muxTokenSecret = process.env.MUX_TOKEN_SECRET;
-
-                const auth = Buffer.from(`4ebb6f4a-55be-487a-8851-389f5b40828c:hLbb2txAORBP8FYECMPWEL81C+7+a4opWqx8dCFtgE0TGk0+A8jzezFwDIFVG/AxrUvjClb5ICB`).toString('base64');
-
-                try {
-                    const response = await axios.post(
-                        'https://api.mux.com/video/v1/uploads',
-                        {
-                        cors_origin: '*',
-                        new_asset_settings: {
-                            playback_policy: ['public'],
-                            encoding_tier: 'baseline',
-                        },
-                        },
-                        {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Basic ${auth}`,
-                        },
-                        }
-                    );
-                    const end = response.data.data.url;
-                    setVideo(end);
-                } catch (error) {
-                    console.log(error);
-                }
-    }
-
-
     
 
     const contextVlaue : StoreContextType = {
@@ -168,7 +130,6 @@ const StoreContextProvider = (props:any) => {
         getReviewSpace,
         link,
         spaces,
-        getendpoint,
         video,
         setuserId,
         userId,

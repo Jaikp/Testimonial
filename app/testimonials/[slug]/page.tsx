@@ -1,6 +1,5 @@
 "use client"
 import { StoreContext } from '@/context/StoreContext'
-import MuxUploader from '@mux/mux-uploader-react';
 import React, { useContext, useEffect, useState } from 'react'
 import { Rating } from "@material-tailwind/react";
 import { Spinner } from "@material-tailwind/react";
@@ -19,18 +18,26 @@ function page({params}:{params:any}) {
         throw new Error("StoreContext must be used within a StoreProvider");
     }
 
-    const { getReviewSpace, reviewSpace, video, getendpoint, addReview } = context;
+    const { getReviewSpace, reviewSpace, addReview } = context;
 
 
   const [upload, setUpload] = useState('');
-const [loading, setloading] = useState(true);
+  const [loading, setloading] = useState(true);
   const [form, setForm] = useState({
     spaceId : params.slug,
     name : "",
     email : "",
     content : "",
-    rating : "5"
+    rating : "5",
+    videoUrl : "null"
   })
+
+  const setVideoUrl = (url : string) => {
+    setForm(prevForm => ({
+      ...prevForm,
+      videoUrl: url
+    }));
+  }
 
   const handleChange = (e : any) => {
     e.preventDefault();
@@ -65,7 +72,6 @@ const [loading, setloading] = useState(true);
   async function handleClick(e:any){
     
     if(e.target.name === 'record'){
-      await getendpoint();
       setUpload(e.target.name);
     }
     else{
@@ -118,7 +124,7 @@ const [loading, setloading] = useState(true);
       {upload === 'record' && (
   <>
   <div onClick={()=>{setUpload('')}} className='absolute top-0 left-0 w-full h-full bg-black opacity-50 z-10'></div>
-  <div className='flex justify-center'>
+  <div className='flex justify-center items-center'>
   <div className='absolute z-20 top-1/4 bg-white shadow-lg p-2 rounded-md'>
           <div className='px-2'>
             <h1 className='font-semibold text-xl'>Record video testimonial</h1>
@@ -130,12 +136,10 @@ const [loading, setloading] = useState(true);
             ))}
               </ul>
               
-              <Rating value={Number(form.rating)} onChange={handleRatingChange} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}  />
+              
               </div>
-    <RecordView />
-        <div className='flex justify-end mt-2'>   
-          <button onClick={()=>{setUpload('')}} className='bg-teal-600 hover:bg-teal-800 text-white px-4 py-2 rounded'>Submit</button>
-        </div> 
+    <RecordView setUpload={setUpload} spaceId={params.slug}/>
+        
   </div>
   </div>
 </>

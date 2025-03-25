@@ -1,6 +1,8 @@
 "use client"
 import { Rating } from '@material-tailwind/react'
 import React from 'react'
+import { CldVideoPlayer } from 'next-cloudinary';
+import 'next-cloudinary/dist/cld-video-player.css';
 
 
 function ReviewCard({review}:{review:any}) {
@@ -16,7 +18,20 @@ function ReviewCard({review}:{review:any}) {
             </div>
         </div>
         <Rating className='mt-3' value={Number(review.rating)} readonly placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}/>
-        <p className='my-10'>{review.content}</p>
+            
+            {review.videoUrl==='null'? (
+                <p className='my-10'>{review.content}</p>
+                ) : (
+                
+                <div className='w-full'>
+                    <CldVideoPlayer
+                        width="1920"
+                        height="1080"
+                        src={review.videoUrl}
+                    />
+                </div>
+            )}
+            <hr className='my-5 border-[#33363B]'/>
         <div className='grid grid-cols-2 gap-3 text-sm'>
             <div>
                 <p className='font-semibold'>Name</p>

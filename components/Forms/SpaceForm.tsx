@@ -13,6 +13,7 @@ function SpaceForm({handleClick,setSpace,addSpace,userId,addGpt}:{handleClick:an
     }
     const [GPT, setGPT] = useState("")
     const [loader, setloader] = useState(false);
+    const [uploading, setUploading] = useState(false);
     const [form, setForm] = useState<Form>({
         userId : userId,
         name : "",
@@ -76,7 +77,7 @@ function SpaceForm({handleClick,setSpace,addSpace,userId,addGpt}:{handleClick:an
       };
 
       const handleSubmit = async () => {
-        console.log(form);
+        setUploading(true);
         await addSpace(form);
         setSpace({ home: false, form: false, close: true });
       };
@@ -147,11 +148,10 @@ function SpaceForm({handleClick,setSpace,addSpace,userId,addGpt}:{handleClick:an
                     <div className='text-sm'>
                         Add
                     </div>
-                </div>
-                
+                </div> 
             </div>
 
-            <button onClick={handleSubmit} className='bg-blue-500 w-full text-white p-4 rounded'>Create new space</button>
+            <button onClick={handleSubmit} className='bg-blue-500 w-full text-white p-4 rounded'>{!uploading? 'Create new space':"uploading..."}</button>
         </div>
         </div>
     </div>

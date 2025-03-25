@@ -13,6 +13,9 @@ const outfit = Outfit({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Endorser • Dashboard",
   description: "",
+  icons:{
+    icon:'/hand-thumbs-up-fill.svg'
+  }
 };
 
 export default function RootLayout({

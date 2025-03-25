@@ -7,6 +7,9 @@ import Footer from '@/components/Navbar/Footer';
 import { ClipboardCopyButton } from '@/components/Testimonials/Clipboard';
 import { Spinner } from '@material-tailwind/react';
 
+ 
+
+
 interface Reviews {
     name: string;
     email: string;
@@ -79,37 +82,20 @@ function Page({ params }: { params: any }) {
                 </div>
             </div>
             <hr className='mt-4 border border-[#33363B]'/>
-            <div className='flex flex-col md:flex-row mt-10'>
-                <div className='xl:pl-36 px-5'>
-                    <h1 className='text-1xl font-semibold mb-4'>INBOX</h1>
-                    <ul className='list-disc ml-4'>
-                        <li className='mb-2'>All</li>
-                        <li className='mb-2'>Video</li>
-                        <li className='mb-2'>Text</li>
-                        <li className='mb-2'>Archived</li>
-                        <li className='mb-2'>Liked</li>
-                    </ul>
-
-                    <h1 className='mt-12 text-1xl font-semibold mb-4'>Embeds & Metrics</h1>
+            <div className='flex flex-col mt-10 justify-center items-center'>
+                <div className=''>
+                    <h1 className='mt-12 text-1xl font-semibold mb-4'>Embeds</h1>
                     <ul className='cursor-pointer'>
-                        <li onClick={handleClick} className='mb-2 flex gap-2'>
+                        <li onClick={handleClick} className='mb-10 flex gap-2 border border-[#33363B] p-2 rounded hover:bg-[#33363B] hover:text-white'>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                             </svg>
-                            Wall of Love
+                            <p>Wall of Love</p>
                         </li>
-                        <li className='mb-2 flex gap-2'>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
-                            </svg>
-                             Single testimonial
-                        </li>
-                        <li className='mb-2'>☆ Badge</li>
-                        <li className='mb-2'>🗃 Collecting widget</li>
-                        <li className='mb-2'>📈 Metrics</li>
+                        
                     </ul>
                 </div>
-                <div className='w-full px-5 xl:px-52 md:px-20'>
+                <div className='w-full px-5 xl:px-96 md:px-20'>
                     
                     {reviews?.map((review,index)=>(
                         <ReviewCard key={index} review={review}/>

@@ -1,67 +1,63 @@
-import multer from 'multer';
-import { NextRequest, NextResponse } from 'next/server';
-import path from 'path';
-import { promises as fs } from 'fs';
+import { NextResponse } from 'next/server';
+import {uploadToCloudinary, cloudinary} from '@/lib/cloudinary';
+import prisma from '../../../utils/prisma';
+import { NextRequest } from 'next/server';
+export const POST = async (req: Request) => {
+  try {
+    // Get the form data
+    const formData = await req.formData();
+    const file = formData.get('video') as File | null;
 
-// Configure Multer to store the uploaded files
-const storage = multer.diskStorage({
-  destination: async (req, file, cb) => {
-    try {
-      const uploadDir = path.join(process.cwd(), 'public/uploads');
-
-      // Ensure the directory exists
-      await fs.mkdir(uploadDir, { recursive: true });
-      cb(null, uploadDir);
-    } catch (error) {
-      console.error('Error creating directory:', error);
-      cb(error as Error, ''); // Handle errors related to directory creation
-    }
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    const extension = path.extname(file.originalname);
-    cb(null, file.fieldname + '-' + uniqueSuffix + extension);
-  },
-});
-
-const upload = multer({ storage });
-
-// Middleware to handle multipart/form-data
-const handler = upload.single('video');
-
-export const POST = async (req: any, res: any) => {
-  return new Promise<NextResponse>((resolve, reject) => {
-    handler(req as any, res, (err) => {
-      if (err) {
-        console.error('Multer file upload error:', err); // Log specific multer errors
-        return reject(
-          NextResponse.json(
-            { success: false, message: 'File upload failed.' },
-            { status: 500 }
-          )
-        );
-      }
-
-      // Access the uploaded file via req.file
-      const file = (req as any).formData.file;
-      console.log(file);
-      if (!file) {
-        console.error('No file uploaded.');
-        return reject(
-          NextResponse.json(
-            { success: false, message: 'No file uploaded.' },
-            { status: 400 }
-          )
-        );
-      }
-
-      const filePath = `/uploads/${file.filename}`;
-      console.log('File uploaded successfully to:', filePath); // Log successful file upload
-
-      // Respond with the file path
-      return resolve(
-        NextResponse.json({ success: true, filePath }, { status: 200 })
+    if (!file) {
+      return NextResponse.json(
+        { success: false, message: 'No file uploaded' },
+        { status: 400 }
       );
+    }
+
+    // Convert to buffer for Cloudinary
+    const buffer = Buffer.from(await file.arrayBuffer());
+
+    // Upload to Cloudinary
+    const result :any = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          resource_type: 'video',
+          folder: 'recordings'
+        },
+        (error: any, result: unknown) => {
+          if (error) reject(error);
+          resolve(result);
+        }
+      );
+      
+      uploadStream.end(buffer);
     });
-  });
+
+    await prisma.review.create({
+      data : {
+        spaceId : formData.get('spaceId') as string,
+        name : formData.get('name') as string,
+        email : formData.get('email') as string,
+        videoUrl : result.public_id,
+        rating : formData.get('rating') as string,
+      }
+    })
+    
+
+    return NextResponse.json(
+      { 
+        success: true, 
+        url: result.secure_url,
+        publicId: result.public_id
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('Upload error:', error);
+    return NextResponse.json(
+      { success: false, message: 'Upload failed' },
+      { status: 500 }
+    );
+  }
 };
