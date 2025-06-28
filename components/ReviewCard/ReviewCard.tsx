@@ -19,7 +19,7 @@ function ReviewCard({review}:{review:any}) {
         </div>
         <Rating className='mt-3' value={Number(review.rating)} readonly placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}/>
             
-            {review.videoUrl==='null'? (
+            {review.videoUrl===''? (
                 <p className='my-10'>{review.content}</p>
                 ) : (
                 
