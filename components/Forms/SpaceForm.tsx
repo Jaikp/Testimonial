@@ -1,162 +1,280 @@
-"use client"
-import React, { useState } from 'react'
+"use client";
+import React, { useState } from "react";
 
+function SpaceForm({
+  handleClick,
+  setSpace,
+  addSpace,
+  userId,
+  addGpt,
+}: {
+  handleClick: any;
+  setSpace: any;
+  addSpace: any;
+  userId: any;
+  addGpt: any;
+}) {
+  interface Form {
+    userId: any;
+    name: string;
+    header: string;
+    message: string;
+    Question: any[];
+  }
 
-function SpaceForm({handleClick,setSpace,addSpace,userId,addGpt}:{handleClick:any,setSpace:any,addSpace:any,userId:any,addGpt:any}) {
+  const [GPT, setGPT] = useState("");
+  const [loader, setLoader] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [form, setForm] = useState<Form>({
+    userId: userId,
+    name: "",
+    header: "",
+    message: "",
+    Question: [
+      { id: 1, question: "Who are you / what are you working on?" },
+      { id: 2, question: "How has [our product / service] helped you?" },
+      { id: 3, question: "What is the best thing about [our product / service]?" },
+    ],
+  });
 
-    interface Form {
-        userId : any,
-        name : string,
-        header : string,
-        message : string,
-        Question : any[]
-    }
-    const [GPT, setGPT] = useState("")
-    const [loader, setloader] = useState(false);
-    const [uploading, setUploading] = useState(false);
-    const [form, setForm] = useState<Form>({
-        userId : userId,
-        name : "",
-        header : "",
-        message : "",
-        Question : [{id:1 , question:"Who are you / what are you working on?"},
-            {id:2 , question:"How has [our product / service] helped you?"},
-            {id:3 , question:"What is the best thing about [our product / service]"}
-        ]
-    })
+  const addQuestion = () => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      Question: [
+        ...prevForm.Question,
+        { id: Date.now(), question: "New question..." },
+      ],
+    }));
+  };
 
-    const addQuestion = ()=>{
-        setForm(prevForm=>({
-            ...prevForm,
-            Question : [...prevForm.Question,{id:Date.now(),question:" "}]
-        }));
-    }
+  const handleQuestionChange = (id: number, value: string) => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      Question: prevForm.Question.map((q) =>
+        q.id === id ? { ...q, question: value } : q
+      ),
+    }));
+  };
 
-    const handleQuestionChange = (id: number,value: string)=>{
+  const deleteQuestion = (id: number) => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      Question: prevForm.Question.filter((q) => q.id !== id),
+    }));
+  };
 
-        setForm(prevForm=>({
-            ...prevForm,
-            Question : prevForm.Question.map(q=>
-                q.id === id ? {...q , question:value} : q
-            )
-        }))
+  const handleGPT = async () => {
+    if (!GPT.trim()) return;
+    setLoader(true);
+    const data = await addGpt(GPT);
+    setLoader(false);
+    setForm({
+      userId: userId,
+      name: data.name,
+      header: data.header,
+      message: data.message,
+      Question: data.questions,
+    });
+  };
 
-    }
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setForm((prevForm) => ({
+      ...prevForm,
+      [name]: value,
+    }));
+  };
 
-    const deleteQuestion = (id:number)=>{
-
-        setForm(prevForm=>({
-            ...prevForm,
-            Question : prevForm.Question.filter(q=> q.id!=id)
-        }))
-    }
-
-    const handleGPT = async (e:any)=>{
-        setloader(true);
-        const form = await addGpt(GPT);
-        setloader(false);
-        setForm({
-            userId : userId,
-            name : form.name,
-            header : form.header,
-            message : form.message,
-            Question : form.questions
-        })
-        console.log(form);
-    }
-
-    const handleChange = (e : any) => {
-        e.preventDefault();
-    
-        const { name, value } = e.target;
-    
-        setForm(prevForm => ({
-          ...prevForm,
-          [name]: value
-        }));
-      };
-
-      const handleSubmit = async () => {
-        setUploading(true);
-        await addSpace(form);
-        setSpace({ home: false, form: false, close: true });
-      };
-
+  const handleSubmit = async () => {
+    setUploading(true);
+    await addSpace(form);
+    setSpace({ home: false, form: false, close: true });
+  };
 
   return (
-    <div className='text-black bg-[#D8E0EA] h-fit pb-20 pt-20'>
-    <div className='mx-5 2xl:mx-52 bg-[#FFFFFF] rounded flex flex-col items-center py-4 shadow-2xl' >
-        <div onClick={handleClick} className='px-4 cursor-pointer w-full text-end right-0'>
-            X
+    <div className="bg-[#EEF1F5] min-h-screen py-16 px-4 sm:px-8">
+      <div className="max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
+        {/* Close Button */}
+        <div className="flex justify-end p-4 border-b">
+          <button
+            onClick={handleClick}
+            className="text-gray-500 hover:text-red-500 text-lg font-semibold transition-colors"
+          >
+            ✕
+          </button>
         </div>
-        <div className='flex flex-col md:flex-row'>
-        <div className='p-4 md:mt-8 md:max-w-lg'>
-            <div className='border p-4 rounded-md py-10'>
-                <div className='text-center mt-40'>
-                    <h1 className='mb-2 text-3xl'>{form.header ? form.header : "Header goes here.."}</h1>
-                    <p>{form.message? form.message : "you custom message goes here.."}</p>
-                </div>
-                <div className='mt-10 mb-12'>
-                    <p className='text-xl mb-4'>Questions</p>
-                    {form.Question?.map((q)=>(
-                        <div className='ml-4 mb-1 flex gap-2 font-light'>
-                            <p>•</p>
-                            <p>{q.question}</p>
-                        </div>
-                    ))}
-                </div>
-                <button className='bg-blue-600 w-full p-2 text-white rounded mb-2' >Record a video</button>
-                <button className='bg-black w-full p-2 text-white rounded'>Send in text</button>
-            </div>
-            <div className='flex justify-between mt-4 gap-2'>
-                <button className='border p-2 rounded w-1/2'>Thank you page</button>
-                <button className='border p-2 rounded w-1/2'>Extra Setting</button>
-            </div>
-        </div>
-        <div className='p-4 mt-8'>
-            <div className='text-center px-8 mb-16'>
-                <h1 className='text-3xl mb-4'>Create new Space</h1>
-                <p className='font-light'>After the Space is created, it will generate a dedicated page for collecting testimonials.</p>
-            </div>
-            <p className='mb-2'>AI Space Creator</p>
-            <div className='flex h-fit gap-2 items-center mb-4'>
-                <input onChange={(e)=>setGPT(e.target.value)} name='GPT' className='border w-full rounded h-10 border-gray-400 bg-white p-2'></input>
-                <button onClick={handleGPT} className='bg-blue-500 text-white rounded h-fit p-2'>{loader ? (<>Processing...</>):(<>Generate</>)}</button>
-            </div>
-            <p>Space name</p>
-            <input onChange={handleChange} name='name' value={form.name} className='border w-full rounded h-10 mt-2 border-gray-400 mb-8 bg-white p-2'></input>
 
-            <p>Header Title</p>
-            <input onChange={handleChange} name='header' value={form.header} className='border w-full rounded h-10 mt-2 border-gray-400 mb-8 bg-white p-2'></input>
-            
-            <p>Your custom message</p>
-            
-            <textarea onChange={handleChange} name='message' value={form.message} className='border w-full rounded h-20 mt-2 border-gray-400 mb-8 p-2 bg-white' placeholder='Write a war message to your customer'></textarea>
-            
+        {/* Two Column Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
+          {/* Left Side - Preview */}
+          <div className="bg-gray-50 border rounded-xl p-8 flex flex-col justify-between shadow-inner h-min">
             <div>
-            <p>Questions</p>
-            {form.Question?.map((q)=>(
-                
-                <div key={q.id} className='flex items-center gap-2 cursor-pointer p-2'> 
-                    <i className="fi fi-br-menu-dots-vertical text-xl h-full flex items-center"></i>
-                    <input onChange={(e)=>handleQuestionChange(q.id , e.target.value)} name='Question' value={q.question} className='border w-full rounded h-10 border-gray-400 bg-white p-2'></input>
-                    <i onClick={()=>deleteQuestion(q.id)} className="fi fi-rr-trash text-xl cursor-pointer flex items-center"></i>
-                </div> 
-            ))}
-                <div className='flex items-center'>
-                    <i onClick={addQuestion} className="fi fi-rr-add p-2 text-lg font-normal flex items-center cursor-pointer"></i>
-                    <div className='text-sm'>
-                        Add
+              <h1 className="text-3xl font-bold text-center text-gray-800 mb-3">
+                {form.header || "Header goes here..."}
+              </h1>
+              <p className="text-center text-gray-600 mb-10">
+                {form.message || "Your custom message goes here..."}
+              </p>
+
+              <div>
+                <h2 className="text-xl font-semibold text-gray-700 mb-4">
+                  Questions
+                </h2>
+                <div className="space-y-3">
+                  {form.Question?.map((q) => (
+                    <div key={q.id} className="flex items-start gap-2">
+                      <span className="text-blue-600 font-bold">•</span>
+                      <p className="text-gray-700">{q.question}</p>
                     </div>
-                </div> 
+                  ))}
+                </div>
+              </div>
             </div>
 
-            <button onClick={handleSubmit} className='bg-blue-500 w-full text-white p-4 rounded'>{!uploading? 'Create new space':"uploading..."}</button>
+            <div className="mt-10 flex flex-col gap-3">
+              <button className="bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition-all">
+                🎥 Record a Video
+              </button>
+              <button className="bg-gray-800 hover:bg-gray-900 text-white py-2 rounded-lg font-medium transition-all">
+                ✉️ Send in Text
+              </button>
+            </div>
+
+            <div className="mt-6 flex justify-between gap-3">
+              <button className="border border-gray-400 text-gray-700 rounded-lg py-2 w-full hover:bg-gray-100 transition">
+                Thank You Page
+              </button>
+              <button className="border border-gray-400 text-gray-700 rounded-lg py-2 w-full hover:bg-gray-100 transition">
+                Extra Settings
+              </button>
+            </div>
+          </div>
+
+          {/* Right Side - Form */}
+          <div className="p-4 sm:p-6 lg:p-8">
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold mb-3 text-gray-800">
+                Create New Space
+              </h1>
+              <p className="text-gray-600">
+                Once created, you’ll get a unique page for collecting
+                testimonials.
+              </p>
+            </div>
+
+            {/* AI Section */}
+            <label className="block font-semibold mb-2 text-gray-700">
+              AI Space Creator
+            </label>
+            <div className="flex gap-2 mb-6">
+              <input
+                onChange={(e) => setGPT(e.target.value)}
+                name="GPT"
+                value={GPT}
+                placeholder="Describe your product or business..."
+                className="border border-gray-300 rounded-lg w-full p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              />
+              <button
+                onClick={handleGPT}
+                className="bg-blue-600 text-white px-4 rounded-lg hover:bg-blue-700 transition"
+              >
+                {loader ? "Processing..." : "Generate"}
+              </button>
+            </div>
+
+            {/* Form Inputs */}
+            <div className="space-y-6">
+              <div>
+                <label className="block text-gray-700 mb-2 font-semibold">
+                  Space Name
+                </label>
+                <input
+                  onChange={handleChange}
+                  name="name"
+                  value={form.name}
+                  className="border border-gray-300 w-full rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-700 mb-2 font-semibold">
+                  Header Title
+                </label>
+                <input
+                  onChange={handleChange}
+                  name="header"
+                  value={form.header}
+                  className="border border-gray-300 w-full rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-700 mb-2 font-semibold">
+                  Custom Message
+                </label>
+                <textarea
+                  onChange={handleChange}
+                  name="message"
+                  value={form.message}
+                  placeholder="Write a warm message to your customers..."
+                  className="border border-gray-300 w-full rounded-lg p-2 h-24 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+              </div>
+
+              {/* Questions Section */}
+              <div>
+                <label className="block text-gray-700 mb-2 font-semibold">
+                  Questions
+                </label>
+                <div className="space-y-3">
+                  {form.Question?.map((q) => (
+                    <div
+                      key={q.id}
+                      className="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg p-2"
+                    >
+                      <input
+                        onChange={(e) =>
+                          handleQuestionChange(q.id, e.target.value)
+                        }
+                        value={q.question}
+                        className="flex-grow border-none bg-transparent focus:ring-0 focus:outline-none text-gray-700"
+                      />
+                      <button
+                        onClick={() => deleteQuestion(q.id)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        🗑
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                <button
+                  onClick={addQuestion}
+                  className="text-blue-600 mt-3 flex items-center gap-1 hover:underline"
+                >
+                  ➕ Add another question
+                </button>
+              </div>
+            </div>
+
+            {/* Submit */}
+            <button
+              onClick={handleSubmit}
+              disabled={uploading}
+              className={`mt-8 w-full py-3 rounded-lg text-white font-semibold transition-all ${
+                uploading
+                  ? "bg-blue-400 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700"
+              }`}
+            >
+              {uploading ? "Uploading..." : "Create Space"}
+            </button>
+          </div>
         </div>
-        </div>
+      </div>
     </div>
-    </div>
-  )
+  );
 }
 
-export default SpaceForm
+export default SpaceForm;

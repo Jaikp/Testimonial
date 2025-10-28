@@ -20,7 +20,7 @@ function Navbar() {
 
 
   return (
-    <div className='mx-10 pt-5 flex justify-between'>
+    <div className='mx-10 pt-5 flex justify-between bg-[#0e0f11]'>
         <div>
             <button onClick={()=> router.push('/dashboard')} className='text-4xl cursor-pointer'>Endorser</button> 
         </div>

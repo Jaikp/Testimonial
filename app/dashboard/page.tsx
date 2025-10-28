@@ -1,119 +1,139 @@
-"use client"
-import SpaceCard from '@/components/dashboard/SpaceCard';
-import SpaceForm from '@/components/Forms/SpaceForm';
-import SpaceLink from '@/components/Forms/SpaceLink';
-import Footer from '@/components/Navbar/Footer';
-import Navbar from '@/components/Navbar/Navbar';
-import { StoreContext } from '@/context/StoreContext';
-import { Spinner } from '@material-tailwind/react';
-import { useRouter } from 'next/navigation'
-import React, { useContext, useEffect, useState } from 'react'
+"use client";
+import SpaceCard from "@/components/dashboard/SpaceCard";
+import SpaceForm from "@/components/Forms/SpaceForm";
+import SpaceLink from "@/components/Forms/SpaceLink";
+import Footer from "@/components/Navbar/Footer";
+import Navbar from "@/components/Navbar/Navbar";
+import { StoreContext } from "@/context/StoreContext";
+import { Spinner } from "@material-tailwind/react";
+import { useRouter } from "next/navigation";
+import React, { useContext, useEffect, useState } from "react";
 
-function page() {
+function Page() {
+  const router = useRouter();
+  const context = useContext(StoreContext);
 
-    const router = useRouter();
-    const context = useContext(StoreContext);
-    
-    if (!context) {
-       throw new Error("StoreContext must be used within a StoreProvider");
+  if (!context) {
+    throw new Error("StoreContext must be used within a StoreProvider");
+  }
+
+  const { link, spaces, addSpace, userId, getSpace, addGpt } = context;
+  const [loading, setLoading] = useState(true);
+  const [space, setSpace] = useState({
+    home: true,
+    form: false,
+    close: false,
+  });
+
+  useEffect(() => {
+    async function loadData() {
+      await getSpace();
+      setLoading(false);
     }
+    loadData();
+  }, [userId]);
 
-    const {link,spaces,addSpace,userId,getSpace,addGpt} = context;
-    const [loading, setLoading] = useState(true);
-    const [space, setSpace] = useState({
-        home : true,
-        form : false,
-        close : false
-    });
-    useEffect(() => {
-        async function loadData(){
-             
-            await getSpace();
-            setLoading(false);
-        }
-        loadData();
-    },[userId])
-    function handleClick(e:any){
-        if(e.target.value === 'form'){
-            setSpace({home:false , form : true , close:false})
-        }
-        else{
-            setSpace({home:true , form : false , close:false})
-        }
+  const handleClick = (e: any) => {
+    if (e.target.value === "form") {
+      setSpace({ home: false, form: true, close: false });
+    } else {
+      setSpace({ home: true, form: false, close: false });
     }
+  };
 
-    const handleClose = ()=>{
-        setSpace({home:true , form : false , close:false})
-    }
-    if(loading){
+  const handleClose = () => {
+    setSpace({ home: true, form: false, close: false });
+  };
 
-        return (<div className='h-screen w-screen flex justify-center items-center'><Spinner className="h-16 w-16 text-blue-700" onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} /></div>)
-    }
+  // Loading Screen
+  if (loading) {
+    return (
+      <div className="h-screen w-screen flex justify-center items-center bg-[#0e0f11]">
+        <Spinner className="h-16 w-16 text-blue-600" onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+      </div>
+    );
+  }
 
-    else if(space.form){
+  // Space Form
+  if (space.form) {
+    return (
+      <div className="min-h-screen bg-[#0e0f11] text-white">
+        <SpaceForm
+          handleClick={handleClick}
+          setSpace={setSpace}
+          addSpace={addSpace}
+          userId={userId}
+          addGpt={addGpt}
+        />
+      </div>
+    );
+  }
 
-        return (
-            <div>
-                <SpaceForm handleClick={handleClick} setSpace={setSpace} addSpace={addSpace} userId={userId} addGpt={addGpt}/>
-            </div>
-        )
-    }
-    else{
+  // Space Link View
+  if (space.close) {
+    return (
+      <div className="min-h-screen bg-[#0e0f11] text-white">
+        <SpaceLink handleClose={handleClose} link={link} />
+      </div>
+    );
+  }
 
+  // Main Dashboard
   return (
+    <div className="bg-[#0e0f11] min-h-screen text-white flex flex-col">
+      <Navbar />
+      <main className="flex-grow px-4 sm:px-8 lg:px-24 xl:px-40 mt-32">
+        {/* Overview Section */}
+        <section>
+          <h1 className="text-4xl font-semibold mb-6">Overview</h1>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="bg-[#1b1d21] border border-gray-700 rounded-2xl p-6 hover:shadow-lg transition-all">
+              <p className="text-gray-400">Videos</p>
+              <p className="text-2xl font-semibold mt-1">0</p>
+            </div>
+            <div className="bg-[#1b1d21] border border-gray-700 rounded-2xl p-6 hover:shadow-lg transition-all">
+              <p className="text-gray-400">Video Credits</p>
+              <p className="text-2xl font-semibold mt-1">0</p>
+            </div>
+            <div className="bg-[#1b1d21] border border-gray-700 rounded-2xl p-6 hover:shadow-lg transition-all">
+              <p className="text-gray-400">Plan</p>
+              <p className="text-2xl font-semibold mt-1">Free Plan</p>
+            </div>
+          </div>
+        </section>
 
-    space.close ? (<div>
-        <SpaceLink handleClose={handleClose} link={link}/>
-    </div>)
-    :
-    (
-        <div>
-            <Navbar/>
-    <div className=' text-white 2xl:mx-52 lg:mx-4 md:mx-4 mx-2 mb-0'>
-    <div className='mt-52'>
-        <h1 className='text-3xl mt-14 mb-5'>Overview</h1>
-        <div className='flex gap-5 lg:flex-nowrap flex-wrap md:flex-rap'>
-            <div className='md:w-[48.5%] w-full lg:w-1/3 bg-[#26282C] rounded-md h-20 p-4 border-gray-700 border'>
-                <p>videos</p>
-                <p>0</p>
-            </div>
-            <div className='md:w-[48.5%] w-full lg:w-1/3 bg-[#26282C] rounded-md h-20 p-4 border-gray-700 border'>
-                <p>video credits</p>
-                <p>0</p>
-            </div>
-            <div className='md:w-[48.5%] w-full lg:w-1/3 bg-[#26282C] rounded-md h-20 p-4 border-gray-700 border'>
-                <p>Plan</p>
-                <p>Free Plan</p>
-            </div>
-        </div>
-        <div className=' mt-14 flex justify-between'>
-            <div>
-                <h1 className='text-3xl'>Spaces</h1>
-            </div>
-            <div>
-                <button onClick={handleClick} name='form' value={'form'} className='text-md bg-blue-600 p-2 rounded hover:bg-blue-700'>+ Create new space</button>
-            </div>
-        </div>
-        <div className='mt-12 flex flex-wrap gap-5 items-start h-fit'>
-            {spaces && spaces.length === 0 ?(<div className='w-full mt-48'>
-                <p className='text-center'>No space yet, add new one?</p>
-            </div>)
-            :
-            (spaces && spaces.map((space, index) => (
+        {/* Spaces Section */}
+        <section className="mt-16">
+          <div className="flex justify-between items-center">
+            <h2 className="text-3xl font-semibold">Spaces</h2>
+            <button
+              onClick={handleClick}
+              name="form"
+              value="form"
+              className="bg-blue-600 hover:bg-blue-700 transition-all text-white px-5 py-2 rounded-lg text-sm font-medium shadow-md"
+            >
+              + Create New Space
+            </button>
+          </div>
+
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {Array.isArray(spaces) && spaces.length > 0 ? (
+                spaces.map((space, index) => (
                 <SpaceCard key={index} header={space} router={router} />
-            )))
-            } 
-        </div>
- 
-    </div>
-    </div>
-    <Footer/>
-    </div>
-    )
+                ))
+            ) : (
+                <div className="col-span-full text-center py-20 text-gray-400">
+                <p>No spaces yet. Want to create one?</p>
+                </div>
+            )}
+            </div>
 
-    
-  )
-}
+        </section>
+      </main>
+
+      <Footer />
+    </div>
+  );
 }
 
-export default page
+export default Page;
