@@ -113,10 +113,13 @@ const StoreContextProvider = (props:any) => {
             const response = await axios.post(`${URL}/api/genai`,{
                 "name": prop
             });
+            if (!response.data.data) {
+                throw new Error("Invalid response from AI service");
+            }
             return response.data.data;
-        } catch (error) {
-
-            console.log(error);
+        } catch (error: any) {
+            console.error("AI Generation Error:", error);
+            throw new Error(error?.response?.data?.message || error?.message || "Failed to generate space with AI");
         }
     }
     

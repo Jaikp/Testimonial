@@ -1,9 +1,15 @@
-import React from 'react'
+'use client';
 
-function page() {
-  return (
-    <div>page</div>
-  )
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
+export default function TestimonialsPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    // Redirect to dashboard since this page doesn't have specific content
+    router.push('/dashboard');
+  }, [router]);
+
+  return null;
 }
-
-export default page

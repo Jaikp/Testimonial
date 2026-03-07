@@ -5,6 +5,7 @@ import { Rating } from "@material-tailwind/react";
 import { Spinner } from "@material-tailwind/react";
 import { Outfit } from 'next/font/google';
 import RecordView from '@/components/Record/RecordView';
+import { Video, MessageSquare, X } from 'lucide-react';
 
 const outfit = Outfit({ subsets: ["latin"] });
  
@@ -86,113 +87,231 @@ function page({params}:{params:any}) {
   }
 
   if(loading){
-
-    return (<div className='h-screen w-screen flex justify-center items-center'><Spinner className="h-16 w-16 text-blue-700" onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} /></div>)
+    return (<div className='h-screen w-screen flex justify-center items-center bg-gradient-to-b from-[#0e0f11] to-[#1a1c20]'><Spinner className="h-16 w-16 text-blue-600" onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} /></div>)
   }
   
   return (
-    <div className='bg-white h-screen text-black relative'>
-      <div className='z-0'>
-        <h1 className='pl-8 pt-4 text-2xl from-neutral-500 font-semibold '>Endorser</h1>
+    <div className='bg-gradient-to-br from-white via-gray-50 to-gray-100 min-h-screen text-gray-900'>
+      {/* Header */}
+      <div className='bg-white border-b border-gray-200 shadow-sm'>
+        <div className='max-w-6xl mx-auto px-6 py-5'>
+          <h1 className='text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent'>Endorser</h1>
+        </div>
       </div>
-      <div className='flex justify-center items-center h-full '>
-      <div className='flex-col justify-center py-4 px-8 w-fit max-w-2xl z-0'>
-          
-          <h1 className="text-5xl text-center mt-10"><span className={outfit.className}> {reviewSpace.header} </span> </h1>
-          <p className='text-xl text-center mt-10 text-gray-500'>{reviewSpace.message}</p>
 
-          <div className='p-2 w-fit items-center mt-5'>
-            <p className='text-xl w-fi '>QUESTIONS</p>
-            <hr className='w-10 rounded-sm border-teal-500 border-2'/>
-            <ul className='text-md font-light mt-4 list-disc w-fit'>
-              
-            {reviewSpace.Question?.map((q: any, index: number) => (
-                  <li className='w-fit mb-1' key={index}>{q.question}</li>
-            ))}
-            </ul>
-          </div>
-          <div className='flex justify-center gap-4 mt-12'>
-            <div>
-              <button onClick={handleClick} name='record' className='bg-teal-600 p-2 px-8 rounded text-md hover:bg-teal-700 cursor-pointer text-white'>Record a video</button>
+      {/* Main Content */}
+      <div className='flex justify-center items-center min-h-[calc(100vh-80px)]'>
+        <div className='w-full max-w-3xl px-6 py-12'>
+          
+          {/* Hero Section */}
+          <div className='text-center mb-12'>
+            <h1 className={`text-5xl sm:text-6xl font-bold mb-4 ${outfit.className}`}>
+              {reviewSpace.header}
+            </h1>
+            <p className='text-xl text-gray-600 leading-relaxed mb-8'>
+              {reviewSpace.message}
+            </p>
+
+            {/* Questions Section */}
+            <div className='mt-8 inline-block text-left bg-white rounded-2xl shadow-md p-8 border border-gray-200'>
+              <h3 className='text-lg font-semibold text-gray-800 mb-4'>Questions We'd Love Your Input On:</h3>
+              <ul className='space-y-3'>
+                {reviewSpace.Question?.map((q: any, index: number) => (
+                  <li key={index} className='flex gap-3'>
+                    <span className='text-blue-600 font-bold flex-shrink-0 w-6'>•</span>
+                    <span className='text-gray-700'>{q.question}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div>
-              <button onClick={handleClick} name='text' className='bg-black p-2 px-8 text-white rounded text-md hover:bg-slate-800 cursor-pointer'>Send in text</button>
-            </div>
           </div>
-          </div> 
+
+          {/* CTA Buttons */}
+          <div className='flex flex-col sm:flex-row justify-center gap-4 mt-12'>
+            <button 
+              onClick={handleClick} 
+              name='record' 
+              className='group flex items-center justify-center gap-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-8 py-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105'
+            >
+              <Video className='w-5 h-5' />
+              Record a Video
+            </button>
+            <button 
+              onClick={handleClick} 
+              name='text' 
+              className='flex items-center justify-center gap-3 bg-gray-800 hover:bg-gray-900 text-white px-8 py-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105'
+            >
+              <MessageSquare className='w-5 h-5' />
+              Send in Text
+            </button>
+          </div>
+
+          <p className='text-center text-gray-500 text-sm mt-8'>
+            Both options are welcome! Share your honest feedback in whatever format works best for you.
+          </p>
+
+        </div>
       </div>
+
+      {/* Video Recording Modal */}
       {upload === 'record' && (
-  <>
-  <div onClick={()=>{setUpload('')}} className='absolute top-0 left-0 w-full h-full bg-black opacity-50 z-10'></div>
-  <div className='flex justify-center items-center'>
-  <div className='absolute z-20 top-1/4 bg-white shadow-lg p-2 rounded-md'>
-          <div className='px-2'>
-            <h1 className='font-semibold text-xl'>Record video testimonial</h1>
-              <p className='text-xl mt-4 mb-1'>Questions</p>
-              <hr className='w-10 border-teal-500 border-2'/>
-              <ul className='text-md font-light mt-2 list-disc ml-4 mb-4'>
-              {reviewSpace.Question?.map((q: any, index: number) => (
-                  <li className='w-fit text-gray-600 text-sm mb-1' key={index}>{q.question}</li>
-            ))}
-              </ul>
-              
-              
+        <>
+          <div 
+            onClick={() => setUpload('')} 
+            className='fixed top-0 left-0 w-full h-full bg-black opacity-50 z-40 transition-opacity'
+          ></div>
+          <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center z-50 p-4'>
+            <div className='bg-white shadow-2xl p-8 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto'>
+              {/* Close Button */}
+              <div className='flex justify-between items-center mb-6'>
+                <h2 className='text-2xl font-bold text-gray-900'>Record Video Testimonial</h2>
+                <button
+                  onClick={() => setUpload('')}
+                  className='p-2 hover:bg-gray-100 rounded-lg transition-colors'
+                >
+                  <X className='w-6 h-6 text-gray-600' />
+                </button>
               </div>
-    <RecordView setUpload={setUpload} spaceId={params.slug}/>
-        
-  </div>
-  </div>
-</>
-)}
 
-      {upload === 'text' ? (
-      <>
-        <div onClick={()=>{setUpload('')}} className='absolute top-0 left-0 w-full h-full bg-black opacity-50 z-10'></div>
-        <div className='flex justify-center items-center'>
-          
-        <div className='absolute bg-white w-fit h-fit md:w-1/2 lg:w-1/3 top-32 z-20 items-center p-4 rounded-md mx-2'>
-            <div className='flex justify-end w-full'>
-              <div onClick={()=>{setUpload("")}} className='cursor-pointer text-xl font-extralight'>X</div>
+              {/* Questions Reference */}
+              <div className='mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg'>
+                <p className='text-sm font-semibold text-blue-900 mb-3'>Questions to consider:</p>
+                <ul className='space-y-2'>
+                  {reviewSpace.Question?.map((q: any, index: number) => (
+                    <li key={index} className='text-sm text-gray-700 flex gap-2'>
+                      <span className='text-blue-600 font-bold flex-shrink-0'>•</span>
+                      {q.question}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Record Component */}
+              <RecordView setUpload={setUpload} spaceId={params.slug}/>
             </div>
-            <form onSubmit={handleSubmit}>
-            <div className='px-2'>
-              <h1 className='font-semibold text-xl'>Write text testimonial too</h1>
-              <p className='text-xl mt-4 mb-1'>Questions</p>
-              <hr className='w-10 border-teal-500 border-2'/>
-              <ul className='text-md font-light mt-2 list-disc ml-4 mb-4'>
-              {reviewSpace.Question?.map((q: any, index: number) => (
-                  <li className='w-fit text-gray-600 text-sm mb-1' key={index}>{q.question}</li>
-            ))}
-              </ul>
-              
-              <Rating value={Number(form.rating)} onChange={handleRatingChange} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}  />
-
-              <textarea onChange={handleChange} name='content' className='w-full bg-white border mt-2 h-20'></textarea>
-
-              <p className='mt-4 font-light text-sm'>Your Name</p>
-              <input onChange={handleChange} name='name' className='w-full border rounded bg-white p-2' required></input>
-              <p className='mt-4 font-light text-sm'>Your Email</p>
-              <input onChange={handleChange} name='email' className='w-full border rounded bg-white p-2' required></input>
-
-              <div className='flex mt-4'>
-                <div className='bg-white mr-2'>
-                  <input className='bg-white border rounded' type='checkbox' required></input>
-                </div>
-                <div className='font-light  text-sm'>I give permission to use this testimonial across social channels and other marketing efforts</div>
-              </div>
-              <div className='flex justify-end gap-2 mt-4'>
-                <button type='button' onClick={handleClick} className='bg-white border border-gray-500 rounded p-2 w-20' name=''>Cancel</button>
-                <button type='submit' className='bg-teal-500 border border-gray-500 rounded p-2 text-white w-20' name='send'>Send</button>
-              </div>
-            </div>
-            </form>
-        </div>
-        </div>
-      </>
-      ) : (
-      <></>
+          </div>
+        </>
       )}
-      
+
+      {/* Text Submission Modal */}
+      {upload === 'text' && (
+        <>
+          <div 
+            onClick={() => setUpload('')} 
+            className='fixed top-0 left-0 w-full h-full bg-black opacity-50 z-40 transition-opacity'
+          ></div>
+          <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center z-50 p-4'>
+            <div className='bg-white shadow-2xl rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto'>
+              {/* Header */}
+              <div className='bg-gradient-to-r from-blue-600 to-blue-500 text-white p-6 flex justify-between items-center'>
+                <h2 className='text-2xl font-bold'>Write Your Testimonial</h2>
+                <button
+                  onClick={() => setUpload("")}
+                  className='p-2 hover:bg-blue-700 rounded-lg transition-colors'
+                >
+                  <X className='w-6 h-6' />
+                </button>
+              </div>
+
+              {/* Form */}
+              <form onSubmit={handleSubmit} className='p-8 space-y-6'>
+                
+                {/* Questions */}
+                <div className='p-4 bg-gray-50 border border-gray-200 rounded-lg'>
+                  <p className='font-semibold text-gray-900 mb-3'>Questions to address:</p>
+                  <ul className='space-y-2'>
+                    {reviewSpace.Question?.map((q: any, index: number) => (
+                      <li key={index} className='text-sm text-gray-700 flex gap-2'>
+                        <span className='text-blue-600 font-bold flex-shrink-0'>•</span>
+                        {q.question}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Rating */}
+                <div>
+                  <label className='block text-sm font-semibold text-gray-700 mb-3'>Your Rating</label>
+                  <Rating 
+                    value={Number(form.rating)} 
+                    onChange={handleRatingChange} 
+                    placeholder={undefined} 
+                    onPointerEnterCapture={undefined} 
+                    onPointerLeaveCapture={undefined}  
+                  />
+                </div>
+
+                {/* Textarea */}
+                <div>
+                  <label className='block text-sm font-semibold text-gray-700 mb-3'>Your Testimonial</label>
+                  <textarea 
+                    onChange={handleChange} 
+                    name='content' 
+                    placeholder='Share your honest feedback...'
+                    className='w-full border border-gray-300 rounded-lg p-4 h-32 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all'
+                    required
+                  ></textarea>
+                </div>
+
+                {/* Name */}
+                <div>
+                  <label className='block text-sm font-semibold text-gray-700 mb-2'>Your Name</label>
+                  <input 
+                    onChange={handleChange} 
+                    name='name' 
+                    type='text'
+                    placeholder='John Doe'
+                    className='w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all' 
+                    required
+                  />
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label className='block text-sm font-semibold text-gray-700 mb-2'>Your Email</label>
+                  <input 
+                    onChange={handleChange} 
+                    name='email' 
+                    type='email'
+                    placeholder='john@example.com'
+                    className='w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all' 
+                    required
+                  />
+                </div>
+
+                {/* Checkbox */}
+                <div className='flex items-start gap-3 p-4 bg-gray-50 border border-gray-200 rounded-lg'>
+                  <input 
+                    type='checkbox' 
+                    required
+                    className='mt-1 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer'
+                  />
+                  <label className='text-sm text-gray-700'>
+                    I give permission to use this testimonial across social channels and other marketing efforts
+                  </label>
+                </div>
+
+                {/* Buttons */}
+                <div className='flex justify-end gap-3 pt-4'>
+                  <button 
+                    type='button' 
+                    onClick={() => setUpload("")}
+                    className='px-6 py-3 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors'
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type='submit' 
+                    className='px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white rounded-lg font-semibold shadow-md hover:shadow-lg transition-all'
+                  >
+                    Submit Testimonial
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </>
+      )}
       
     </div>)
   

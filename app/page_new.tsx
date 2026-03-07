@@ -3,10 +3,33 @@ import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Navbar/Footer";
 import { motion } from "framer-motion";
-import { Rocket, Layers, ShieldCheck, ArrowRight, CheckCircle } from "lucide-react";
+import { Rocket, Layers, ShieldCheck, Star, ArrowRight, CheckCircle } from "lucide-react";
 
 export default function Home() {
   const router = useRouter();
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut",
+      },
+    },
+  };
 
   return (
     <>
@@ -98,7 +121,13 @@ export default function Home() {
         </section>
 
         {/* Features Section */}
-        <section className="relative mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 px-4 sm:px-8 lg:px-16 xl:px-32 mb-32 z-10">
+        <motion.section
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="relative mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 px-4 sm:px-8 lg:px-16 xl:px-32 mb-32 z-10"
+        >
           {[
             {
               icon: <Rocket className="h-8 w-8" />,
@@ -124,10 +153,7 @@ export default function Home() {
           ].map((feature, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.2 }}
-              viewport={{ once: true }}
+              variants={itemVariants}
               className={`group relative bg-gradient-to-br ${feature.color} border border-gray-700 hover:border-blue-500/50 rounded-2xl p-8 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 overflow-hidden`}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 to-blue-500/0 group-hover:from-blue-500/5 group-hover:to-blue-500/5 transition-all duration-300"></div>
@@ -140,7 +166,37 @@ export default function Home() {
               </div>
             </motion.div>
           ))}
-        </section>
+        </motion.section>
+
+        {/* Stats Section */}
+        <motion.section
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="relative px-4 sm:px-8 lg:px-16 xl:px-32 mb-32 z-10"
+        >
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {[
+              { number: "10K+", label: "Testimonials Collected" },
+              { number: "500+", label: "Happy Customers" },
+              { number: "99.9%", label: "Uptime Guaranteed" },
+              { number: "24/7", label: "Support Available" },
+            ].map((stat, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="text-center p-6 rounded-xl bg-gray-800/30 border border-gray-700 hover:border-blue-500/30 transition-all"
+              >
+                <p className="text-2xl sm:text-3xl font-bold text-blue-400 mb-2">{stat.number}</p>
+                <p className="text-gray-400 text-sm">{stat.label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
 
         {/* Call to Action Section */}
         <motion.section
