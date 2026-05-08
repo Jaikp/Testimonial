@@ -98,7 +98,11 @@ function Page() {
               <div className="relative flex items-start justify-between">
                 <div>
                   <p className="text-gray-400 text-sm font-medium uppercase tracking-wide">Total Videos</p>
-                  <p className="text-4xl font-bold mt-2">0</p>
+                  <p className="text-4xl font-bold mt-2">
+                    {Array.isArray(spaces) ? spaces.reduce((total, space) => {
+                      return total + (space.reviews?.filter((r: any) => r.videoUrl && r.videoUrl.trim() !== "").length || 0);
+                    }, 0) : 0}
+                  </p>
                 </div>
                 <Video className="w-12 h-12 text-blue-500 opacity-60 group-hover:opacity-100 transition-opacity" />
               </div>

@@ -226,7 +226,7 @@ function SpaceForm({
                     name="GPT"
                     value={GPT}
                     placeholder="e.g., SaaS project management tool..."
-                    className="border border-gray-300 rounded-lg w-full px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="border border-gray-300 bg-white text-gray-900 rounded-lg w-full px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     disabled={loader}
                   />
                   <button
@@ -255,7 +255,7 @@ function SpaceForm({
                   name="name"
                   value={form.name}
                   placeholder="e.g., Customer Feedback 2024"
-                  className="border border-gray-300 w-full rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="border border-gray-300 bg-white text-gray-900 w-full rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 />
               </div>
 
@@ -268,7 +268,7 @@ function SpaceForm({
                   name="header"
                   value={form.header}
                   placeholder="Share Your Feedback"
-                  className="border border-gray-300 w-full rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="border border-gray-300 bg-white text-gray-900 w-full rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 />
               </div>
 
@@ -281,7 +281,7 @@ function SpaceForm({
                   name="message"
                   value={form.message}
                   placeholder="Write a warm message to your customers..."
-                  className="border border-gray-300 w-full rounded-lg px-4 py-3 h-24 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all"
+                  className="border border-gray-300 bg-white text-gray-900 w-full rounded-lg px-4 py-3 h-24 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all"
                 />
               </div>
 
@@ -310,7 +310,7 @@ function SpaceForm({
                           handleQuestionChange(q.id, e.target.value)
                         }
                         value={q.question}
-                        className="flex-grow border-none bg-transparent focus:ring-0 focus:outline-none text-gray-700 text-sm"
+                        className="flex-grow border-none bg-transparent focus:ring-0 focus:outline-none text-gray-900 text-sm"
                       />
                       <button
                         onClick={() => deleteQuestion(q.id)}

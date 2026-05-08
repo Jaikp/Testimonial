@@ -12,7 +12,16 @@ interface Review {
   videoUrl?: string;
 }
 
-function TestimonialCard({ review }: { review: Review }) {
+interface CustomTheme {
+  backgroundColor?: string;
+  cardBackgroundColor?: string;
+  textColor?: string;
+  borderColor?: string;
+  borderRadius?: string;
+  layout?: string;
+}
+
+function TestimonialCard({ review, theme = "default", customTheme }: { review: Review; theme?: string; customTheme?: CustomTheme | null }) {
   const formattedDate = new Date(review.createdAt).toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
@@ -24,15 +33,28 @@ function TestimonialCard({ review }: { review: Review }) {
       ? parseInt(review.rating)
       : review.rating || 0;
 
+  const isDark = theme === "dark";
+  const isCustom = theme === "custom" && customTheme;
+
   return (
     <motion.div
       whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.2 }}
-      className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-xl overflow-hidden flex flex-col text-gray-800 max-w-sm mx-auto w-full"
+      style={isCustom ? {
+        backgroundColor: customTheme.cardBackgroundColor,
+        borderColor: customTheme.borderColor,
+        color: customTheme.textColor,
+        borderRadius: customTheme.borderRadius || "16px",
+      } : {}}
+      className={`${
+        isCustom ? "" : isDark
+          ? "bg-gray-800 border-gray-700 shadow-lg text-white"
+          : "bg-white border-gray-200 shadow-md hover:shadow-xl text-gray-800"
+      } rounded-2xl border overflow-hidden flex flex-col w-full break-inside-avoid mb-6`}
     >
       {/* Video Section (if video exists) */}
       {review.videoUrl && review.videoUrl.trim() !== "" ? (
-        <div className="relative w-full bg-black overflow-hidden">
+        <div className="relative w-full bg-black overflow-hidden" style={isCustom && customTheme.borderRadius ? { borderTopLeftRadius: customTheme.borderRadius, borderTopRightRadius: customTheme.borderRadius } : {}}>
           <CldVideoPlayer width="1920" height="1080" src={review.videoUrl} />
         </div>
       ) : null}
@@ -46,9 +68,9 @@ function TestimonialCard({ review }: { review: Review }) {
           </div>
           <div className="flex-grow">
             <h2 className="text-lg font-semibold">{review.name}</h2>
-            <p className="text-sm text-gray-500">{formattedDate}</p>
+            <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>{formattedDate}</p>
             {review.videoUrl && (
-              <div className="flex items-center gap-1 mt-1 text-blue-600 text-xs font-medium">
+              <div className={`flex items-center gap-1 mt-1 text-xs font-medium ${isDark ? "text-blue-400" : "text-blue-600"}`}>
                 <Volume2 className="w-3 h-3" />
                 Video Testimonial
               </div>
@@ -58,14 +80,18 @@ function TestimonialCard({ review }: { review: Review }) {
 
         {/* Review content (text) */}
         {review.content && (
-          <p className="text-gray-700 text-sm mb-4 leading-relaxed">
+          <p 
+            style={isCustom ? { color: customTheme.textColor } : {}}
+            className={`text-sm mb-4 leading-relaxed ${isCustom ? "" : isDark ? "text-gray-200" : "text-gray-700"}`}>
             "{review.content}"
           </p>
         )}
 
         {/* Video only indicator */}
         {!review.content && review.videoUrl && (
-          <p className="text-gray-500 text-sm italic mb-4">
+          <p 
+            style={isCustom ? { color: customTheme.textColor, opacity: 0.8 } : {}}
+            className={`text-sm italic mb-4 ${isCustom ? "" : isDark ? "text-gray-400" : "text-gray-500"}`}>
             💬 Video testimonial - no text provided
           </p>
         )}
@@ -77,7 +103,7 @@ function TestimonialCard({ review }: { review: Review }) {
               <Star
                 key={i}
                 className={`w-5 h-5 ${
-                  i < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
+                  i < rating ? "text-yellow-400 fill-yellow-400" : isDark ? "text-gray-600" : "text-gray-300"
                 }`}
               />
             ))}

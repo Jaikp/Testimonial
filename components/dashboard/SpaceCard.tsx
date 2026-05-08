@@ -30,13 +30,13 @@ function SpaceCard({header,router}:{header:any,router:any}) {
         <div className='flex items-center gap-2 text-gray-300'>
           <Video className='w-4 h-4 text-blue-500' />
           <span className='text-sm'>
-            <span className='font-semibold'>0</span> Videos
+            <span className='font-semibold'>{header.reviews?.filter((r: any) => r.videoUrl && r.videoUrl.trim() !== "").length || 0}</span> Videos
           </span>
         </div>
         <div className='flex items-center gap-2 text-gray-300'>
           <MessageSquare className='w-4 h-4 text-green-500' />
           <span className='text-sm'>
-            <span className='font-semibold'>0</span> Text
+            <span className='font-semibold'>{header.reviews?.filter((r: any) => (!r.videoUrl || r.videoUrl.trim() === "") && (r.content && r.content.trim() !== "")).length || 0}</span> Text
           </span>
         </div>
       </div>

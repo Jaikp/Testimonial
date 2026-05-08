@@ -36,12 +36,21 @@ async function GET(req: NextRequest) {
         const response = await prisma.space.findMany({
         where :{
             userId
+        },
+        include: {
+            reviews: {
+                select: {
+                    id: true,
+                    videoUrl: true,
+                    content: true
+                }
+            }
         }
         })
-        return NextResponse.json({ message: "Space Created" , data: response });
+        return NextResponse.json({ message: "Space Retrieved" , data: response });
     }
     catch(e){
-        return NextResponse.json({ message: "Failes" });
+        return NextResponse.json({ message: "Failed" });
     }
 }
 

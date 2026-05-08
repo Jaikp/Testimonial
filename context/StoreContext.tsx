@@ -26,6 +26,10 @@ interface StoreContextType {
     addReview: (prop: any) => Promise<void>;
     getReview: (prop: any) => Promise<void>;
     addGpt: (prop: any) => Promise<void>;
+    analyzeReviews: (reviews: any[]) => Promise<any>;
+    generateReply: (customerName: string, reviewContent: string) => Promise<string>;
+    generateEmbedTheme: (prompt: string) => Promise<any>;
+    toggleFavourite: (reviewId: string, favourite: boolean) => Promise<void>;
 }
 
 export const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -122,6 +126,64 @@ const StoreContextProvider = (props:any) => {
             throw new Error(error?.response?.data?.message || error?.message || "Failed to generate space with AI");
         }
     }
+
+    const analyzeReviews = async (reviews: any[]) => {
+        try {
+            const response = await axios.post(`${URL}/api/analyze-reviews`, {
+                reviews: reviews
+            });
+            if (!response.data.data) {
+                throw new Error("Invalid response from AI analysis service");
+            }
+            return response.data.data;
+        } catch (error: any) {
+            console.error("AI Analysis Error:", error);
+            throw new Error(error?.response?.data?.message || error?.message || "Failed to analyze reviews");
+        }
+    }
+    
+    const generateReply = async (customerName: string, reviewContent: string) => {
+        try {
+            const response = await axios.post(`${URL}/api/generate-reply`, {
+                customerName,
+                reviewContent
+            });
+            if (!response.data.data?.reply) {
+                throw new Error("Invalid response from AI reply service");
+            }
+            return response.data.data.reply;
+        } catch (error: any) {
+            console.error("AI Reply Generation Error:", error);
+            throw new Error(error?.response?.data?.message || error?.message || "Failed to generate reply");
+        }
+    }
+    
+    const generateEmbedTheme = async (prompt: string) => {
+        try {
+            const response = await axios.post(`${URL}/api/generate-embed-theme`, {
+                prompt
+            });
+            if (!response.data.data) {
+                throw new Error("Invalid response from AI theme generator");
+            }
+            return response.data.data;
+        } catch (error: any) {
+            console.error("AI Theme Generation Error:", error);
+            throw new Error(error?.response?.data?.message || error?.message || "Failed to generate theme");
+        }
+    }
+    
+    const toggleFavourite = async (reviewId: string, favourite: boolean) => {
+        try {
+            await axios.patch(`${URL}/api/review/favourite`, {
+                reviewId,
+                favourite
+            });
+        } catch (error: any) {
+            console.error("Error toggling favourite status:", error);
+            throw new Error(error?.response?.data?.message || error?.message || "Failed to update review");
+        }
+    }
     
 
     
@@ -140,6 +202,10 @@ const StoreContextProvider = (props:any) => {
         getReview,
         reviewSpace,
         addGpt,
+        analyzeReviews,
+        generateReply,
+        generateEmbedTheme,
+        toggleFavourite,
     }
 
     return (
